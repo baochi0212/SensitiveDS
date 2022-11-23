@@ -74,17 +74,25 @@ title_script = """
 
         """
 
+sele_script = """
+
+            for (let i = 0; i < 5; i++) {
+                document.querySelector('div.styles_loadMoreWrapper__pOldr button').click()
+
+            }
+"""
+
 class PoliticsSpider(scrapy.Spider):
     name = 'test'
     def start_requests(self):
 
         url  = 'https://www.nbcnews.com/politics'
-        yield SplashRequest(
-            url,
-            callback=self.parse, 
-            endpoint='execute', 
-            args={'wait': 2.5, 'lua_source': title_script}
-            )
+        yield SeleniumRequest(
+            url=url,
+            callback=self.parse,
+            script=sele_script,
+            wait_time=3,
+        )
     def parse_article(self, response):
         # meta = response.meta['splash']['args']['meta']
         # print(meta)   
@@ -92,7 +100,7 @@ class PoliticsSpider(scrapy.Spider):
         title = response.css('h1::text').get()
         contents = ' '.join([i for i in response.css('div.article-body__content').css('p').getall()])
         item['title'] = title
-        # item['content'] = contents
+        item['content'] = contents
 
 
         # item.preprocess()
@@ -100,17 +108,14 @@ class PoliticsSpider(scrapy.Spider):
             yield item
     def parse(self, response):
         urls = response.css('div.styles_itemsContainer__saJYW').css('a::attr(href)').getall()
-        item = TestItem()
-        item['url'] = urls
-        yield item
-        # for url in urls:
-        #     if len(url) > 100:
-        #         yield SplashRequest(
-        #             url, 
-        #             callback=self.parse_article,
-        #             endpoint='execute',
-        #             args={'wait': 2, 'lua_source': content_script} 
-        #         )
+        button = response.css('div.styles_loadMoreWrapper__pOldr button').get()
+        # yield item
+        for url in urls:
+            if len(url) > 100:
+                yield SplashRequest(
+                    url=url, 
+                    callback=self.parse_article,
+                )
 
     #         # keep passing the metadata and used parser to next request
     #     df = pd.DataFrame.from_dict(dict([(k, [None]) for k in temp_item.keys()]))
