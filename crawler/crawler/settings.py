@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = 'crawler.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'crawler (+http://www.yourdomain.com)'
+# USER_AGENT='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -91,11 +91,13 @@ ROBOTSTXT_OBEY = True
 # SPLASH_URL = 'http://localhost:8050'
 
 
-# # Enable Splash downloader middleware and change HttpCompressionMiddleware priority
+# Enable Splash downloader middleware and change HttpCompressionMiddleware priority
 # DOWNLOADER_MIDDLEWARES = {
 #     'scrapy_splash.SplashCookiesMiddleware': 723,
 #     'scrapy_splash.SplashMiddleware': 725,
 #     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+#     # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+#     # 'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
 # }
 
 # # Enable Splash Deduplicate Args Filter
@@ -105,3 +107,17 @@ ROBOTSTXT_OBEY = True
 
 # # Define the Splash DupeFilter
 # DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
+# HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+#selenium
+from shutil import which
+  
+SELENIUM_DRIVER_NAME = 'chrome'
+SELENIUM_DRIVER_EXECUTABLE_PATH = '/home/xps/educate/code/hust/DS_20222/data-science-e10/crawler/chromedriver'
+SELENIUM_DRIVER_ARGUMENTS=['--headless']  
+  
+DOWNLOADER_MIDDLEWARES = {
+     'scrapy_selenium.SeleniumMiddleware': 800
+     }
+print(SELENIUM_DRIVER_EXECUTABLE_PATH)
