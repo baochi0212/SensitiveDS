@@ -1,0 +1,26 @@
+Pipeline: https://madewithml.com/static/images/mlops/iteration/development_cycle.png
+- Data:
+    - Crawl: selenium + splash, scrapy
+    - Preprocess: python, nlp-spark
+    - Store: mongodb
+    - Annotate: docano
+    - Visualization: Plotly, atlas
+    *How to choose dataset size
+    *How to augment data: NLP-aug, textattack, novel methods for our problems ?  
+    *What data statistics to plot
+    *Multi-class !!!
+
+- Modelling:
+    Models:
+        - SVM, MLP
+        - RNN family
+        - Transformer family
+        *Distillation methods?
+        *Which one used as baseliner?
+        *Training methods applied ? 
+- Metrics: 
+    Classification metrics
+    *Which one to prioritize ? For example: should we prioritize the Terrorism or ...
+- Evaluation: 
+    Offline: 
+    Online:
