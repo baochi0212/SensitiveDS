@@ -56,7 +56,7 @@ def parse_folder(class_name="politics"):
         
         for sentence in text.split('.'):
             with open(processed + f"/{class_name}/{num_text}.txt", 'w') as f: 
-                f.write(sentence)
+                f.write(sentence.strip())
                 num_text += 1 
     print("NUMBER of TEXT", num_text)
 
