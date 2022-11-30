@@ -1,0 +1,13 @@
+Data: 
+- Crawl: Vu  + Viet Anh
+Shopeefood, Nowfood -> Pick features de nhom process xu ly
+- Process: Nga + Manh
+Process raw to features and labels de nhom Model xu ly
+
+Model:
+- Dang
+Dung cac model xu ly van ban 
+
+Metrics + Evaluation:
+- Viet A
+Classification metrics

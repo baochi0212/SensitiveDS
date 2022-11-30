@@ -5,7 +5,7 @@ from crawler.items import PoliticsItem, TestItem
 import os
 import pandas as pd
 
-data_path = os.environ['data_path']
+# data_path = os.environ['data_path']
 
 content_script = """
         function main(splash)
@@ -76,7 +76,7 @@ title_script = """
 
 sele_script = """
 
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 3; i++) {
                 document.querySelector('div.styles_loadMoreWrapper__pOldr button').click()
 
             }

@@ -7,7 +7,8 @@ Pipeline: https://madewithml.com/static/images/mlops/iteration/development_cycle
     - Visualization: Plotly, atlas
     *How to choose dataset size
     *How to augment data: NLP-aug, textattack, novel methods for our problems ?  
-    *What data statistics to plot
+    *What data statistics to plot?
+    *Where to crawl?
     *Multi-class !!!
 
 - Modelling:

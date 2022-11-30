@@ -2,15 +2,16 @@ import pandas as pd
 import re
 import json
 import os
+from glob import glob
+raw = "/home/xps/educate/code/hust/DS_20222/data-science-e10/data/raw"
+processed = "/home/xps/educate/code/hust/DS_20222/data-science-e10/data/processed"
 
 
-def json2txt(jsonfile):
+def json2txt(jsonfile, class_name="politics"):
     with open(jsonfile, 'r') as f:
         file = json.load(f)
-    if not os.path.exists('textfile'):
-        os.mkdir('textfile') 
     for i, line in enumerate(file):
-        with open(f'textfile/test{i}.txt', 'w') as f:
+        with open(f'{raw}/{class_name}/{i}.txt', 'w') as f:
             f.write(line['content'])
 
 def process(text):
@@ -29,10 +30,41 @@ def test_fn(name: int = 8) -> float:
     input and return type docs
     '''
     return float(name)
+
+def parse(string):
+    new_string = ""
+    a, b = 1, 1
+    while a != -1 and b != -1:
+        a, b = string.find('<'), string.find('>')
     
+        c = b + string[b+1:].find('<')
+        if c > 0:
+            new_string = ' '.join([new_string, string[b+1:c]])
+        else:
+            new_string = ' '.join([new_string, string[b+1:]])
+        string = string[b+1:]
+    return new_string.strip()
+def parse_folder(class_name="politics"):
+
+    path = raw + f"/{class_name}/*.txt"
+    files = glob(path)
+    num_text = 0
+    for file in files:
+        path = f"{file}"
+        text = open(path, 'r').readline()
+        text = parse(text)
+        
+        for sentence in text.split('.'):
+            with open(processed + f"/{class_name}/{num_text}.txt", 'w') as f: 
+                f.write(sentence)
+                num_text += 1 
+    print("NUMBER of TEXT", num_text)
+
+
 
 if __name__ == '__main__':
 
-    # json2txt('/home/xps/educate/code/hust/DS_20222/data-science-e10/crawler/crawler/spiders/test.json')
+    json2txt('/home/xps/educate/code/hust/DS_20222/data-science-e10/crawler/crawler/spiders/crawl.json')
+    parse_folder(class_name="politics")
     # print(process('<adsfsd bsdbaa ascc'))
-    print(test_fn())
+
