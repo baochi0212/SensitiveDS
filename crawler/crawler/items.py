@@ -16,4 +16,8 @@ class PoliticsItem(scrapy.Item):
     def preprocess(self):
         self['content'] = self['content'].split('>')[1].split('>')[0]
 
+class InsultItem(scrapy.Item):
+    title = scrapy.Field()
+    content = scrapy.Field()
+
 
