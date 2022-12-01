@@ -106,18 +106,18 @@ SPIDER_MIDDLEWARES = {
 }
 
 # # Define the Splash DupeFilter
-# DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
-# HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 
 #selenium
-from shutil import which
+# from shutil import which
   
-SELENIUM_DRIVER_NAME = 'chrome'
-SELENIUM_DRIVER_EXECUTABLE_PATH = '/home/xps/educate/code/hust/DS_20222/data-science-e10/crawler/chromedriver'
-SELENIUM_DRIVER_ARGUMENTS=['--headless']  
+# SELENIUM_DRIVER_NAME = 'chrome'
+# SELENIUM_DRIVER_EXECUTABLE_PATH = '/home/xps/educate/code/hust/DS_20222/data-science-e10/crawler/chromedriver'
+# SELENIUM_DRIVER_ARGUMENTS=['--headless']  
   
-DOWNLOADER_MIDDLEWARES = {
-     'scrapy_selenium.SeleniumMiddleware': 800
-     }
-print(SELENIUM_DRIVER_EXECUTABLE_PATH)
+# DOWNLOADER_MIDDLEWARES = {
+#      'scrapy_selenium.SeleniumMiddleware': 800
+#      }
+# print(SELENIUM_DRIVER_EXECUTABLE_PATH)

@@ -1,7 +1,7 @@
 import scrapy
 from scrapy_splash import SplashRequest 
 from scrapy_selenium import SeleniumRequest
-from crawler.items import PoliticsItem, InsultItem
+from crawler.items import PoliticsItem, TestItem
 import os
 import pandas as pd
 
@@ -9,8 +9,8 @@ import pandas as pd
 
 lua_script = """
         function main(splash)
-            local num_scrolls = 100
-            local scroll_delay = 30
+            local num_scrolls = 20
+            local scroll_delay = 0.5
             local num_clicks = 4
             local click_delay = 0.5
             local scroll_to = splash:jsfunc("window.scrollTo")
@@ -76,47 +76,38 @@ lua_script = """
 
 sele_script = """
 
-            for (let i = 0; i < 10; i++) {
-                window.scrollBy(0,1000)
+            for (let i = 0; i < 3; i++) {
+                document.querySelector('div.styles_loadMoreWrapper__pOldr button').click()
 
             }
 """
 
-class RedditSpider(scrapy.Spider):
+class PoliticsSpider(scrapy.Spider):
     name = 'test'
     def start_requests(self):
 
-        url  = 'https://www.reddit.com/r/RoastMe/'
-        # yield SplashRequest(
+        # url  = 'https://xe.chotot.com/mua-ban-xe-may-quan-lien-chieu-da-nang/99205208.htm#px=SR-stickyad-[PO-1][PL-top]'
+        url = r"https://xe.chotot.com/"
+        # yield SeleniumRequest(
         #     url=url,
         #     callback=self.parse,
-        #     args={'lua_source': lua_script, 'wait': 100}
+        #     script=sele_script,
+        #     wait_time=3,
         # )
-        yield SeleniumRequest(
-            url=url,
-            callback=self.parse,
-            wait_time=3,
-            script=sele_script, 
-        )
-    def parse_article(self, response):
-        # meta = response.meta['splash']['args']['meta']
-        # print(meta)   
-        item = InsultItem()
-        comments = response.css("[data-testid=comment]").getall()
-        item['content'] = '  '.join([comment for comment in comments])
-
-
-        yield item
-
+        yield SplashRequest(
+            callback=self.parse, 
+            endpoint='execute', 
+            args={'wait': 10, 'lua_source': lua_script, 'url': url}
+            )
 
 
     def parse(self, response):
-        urls = response.css("[data-click-id=body]::attr(href)").getall()
+        urls = response.css('div.styles_itemsContainer__saJYW').css('a::attr(href)').getall()
+        button = response.css('div.styles_loadMoreWrapper__pOldr button').get()
         # yield item
         for url in urls:
-            if len(url) > 10:
+            if len(url) > 100:
                 yield SplashRequest(
-                    url="https://www.reddit.com" + url, 
+                    url=url, 
                     callback=self.parse_article,
-
                 )
