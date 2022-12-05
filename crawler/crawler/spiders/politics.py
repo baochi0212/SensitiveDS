@@ -83,7 +83,7 @@ sele_script = """
 """
 
 class PoliticsSpider(scrapy.Spider):
-    name = 'test'
+    name = 'politics'
     def start_requests(self):
 
         url  = 'https://www.nbcnews.com/politics'

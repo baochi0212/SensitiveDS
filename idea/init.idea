@@ -10,6 +10,7 @@ Pipeline: https://madewithml.com/static/images/mlops/iteration/development_cycle
     *What data statistics to plot?
     *Where to crawl?
     *Multi-class !!!
+    *Some texts avert the preprocessing
 
 - Modelling:
     Models:
