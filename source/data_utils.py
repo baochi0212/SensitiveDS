@@ -180,7 +180,7 @@ def load_data(dataset, data_dir, tokenizer, train_batch_size, test_batch_size, m
     testset = MyDataset(test_data, label_dict, tokenizer, model_name, method)
     collate_fn = partial(my_collate, tokenizer=tokenizer, method=method, num_classes=len(label_dict))
     train_dataloader = DataLoader(trainset, train_batch_size, shuffle=True, num_workers=workers, collate_fn=collate_fn, pin_memory=True)
-    test_dataloader = DataLoader(testset, test_batch_size, shuffle=False, num_workers=workers, collate_fn=collate_fn, pin_memory=True)
+    test_dataloader = DataLoader(testset, test_batch_size, shuffle=True, num_workers=workers, collate_fn=collate_fn, pin_memory=True)
     return train_dataloader, test_dataloader
 
 if __name__ == '__main__':
