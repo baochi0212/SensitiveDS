@@ -4,7 +4,7 @@ from glob import glob
 processed_path = "/home/xps/educate/code/hust/DS_20222/data-science-e10/data/processed/modelling"
 data_labels = ['insult', 'religion', 'terrorism', 'politics']
 concat_dict = []
-num_samples = {'train': 0.7, 'test': 0.2, 'dev': 0.1} #keep track of splitting
+num_samples = {'train': 0.6, 'test': 0.4, 'dev': 0.0} #keep track of splitting
 neutral_dict = []
 sum_count = 0
 for data_label in data_labels:
@@ -20,7 +20,7 @@ for data_label in data_labels:
             if 'neutral' in label or 'neural' in label:
                 neutral_dict.append({'text': text, 'label': 'neutral'})    
             else:
-                if data_label in label or data_label in label[0]:
+                if data_label in label or data_label in label:
                     data_dict.append({'text': text, 'label': data_label})
                 else:
                     data_dict.append({'text': text, 'label': label[0]})
