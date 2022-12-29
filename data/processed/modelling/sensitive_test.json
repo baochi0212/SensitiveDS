@@ -296,6 +296,18 @@
       "label": "terrorism"
    },
    {
+      "text": "The district is nearly 70% Hispanic and has a large Mexican American\u00a0 population",
+      "label": "religion"
+   },
+   {
+      "text": "He said that when he talked about bringing in heavy weapons by boat, he was actually engaged in creative writing and just referencing a screenplay he wrote Jan",
+      "label": "terrorism"
+   },
+   {
+      "text": "She told jurors that she felt like she was part of a historic moment and that rioters were making history on Jan.  6",
+      "label": "terrorism"
+   },
+   {
       "text": "OP's Bio: I climb from time to time.  I play the clarinet",
       "label": "neutral"
    },
@@ -1008,6 +1020,10 @@
       "label": "insult"
    },
    {
+      "text": "s",
+      "label": "insult"
+   },
+   {
       "text": "The Bible is clearly not the word of God",
       "label": "religion"
    },
@@ -1329,10 +1345,6 @@
    },
    {
       "text": "Does this make any sense to you Do you see any Divine Wisdom in this Islamic law Do you think Muhammad/Allah has done justice with women here But the opposite is not valid, ie",
-      "label": "religion"
-   },
-   {
-      "text": "But the illogical division of shares by Quran made it happen that a sister gets more than mother in inheritance (even if the sister is married)",
       "label": "religion"
    },
    {
@@ -1797,14 +1809,6 @@
    },
    {
       "text": "2 Police Officers Killed in North Benin Attack",
-      "label": "terrorism"
-   },
-   {
-      "text": "West African Countries Meet Over Spillover of Terrorism From Sahel Region",
-      "label": "terrorism"
-   },
-   {
-      "text": "Over 100 ex-Afghan forces, officials killed since US pullout: UN",
       "label": "terrorism"
    }
 ]
