@@ -5,6 +5,9 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+from loss_func import CELoss, SupConLoss, DualLoss
+from data_utils import load_data, text2dict
+from transformers import logging, AutoTokenizer, AutoModel, BertModel, BertConfig, get_linear_schedule_with_warmup
 
 class Net:
     def __init__(self, net, params, device):
@@ -158,3 +161,68 @@ class CIFAR10_Net(nn.Module):
 
     def get_embedding_dim(self):
         return 50
+
+class Transformer(nn.Module):
+
+    def __init__(self, base_model, num_classes, method):
+        super().__init__()
+        self.base_model = base_model
+        self.num_classes = num_classes
+        self.method = method
+        self.linear = nn.Linear(base_model.config.hidden_size, num_classes)
+        self.dropout = nn.Dropout(0.5)
+        for param in base_model.parameters():
+            param.requires_grad_(True)
+    def predict_prob(self):
+        pass
+
+    def forward(self, inputs):
+        raw_outputs = self.base_model(**inputs)
+        hiddens = raw_outputs.last_hidden_state
+        cls_feats = hiddens[:, 0, :]
+        if self.method in ['ce', 'scl']:
+            label_feats = None
+            predicts = self.linear(self.dropout(cls_feats))
+        else:
+            label_feats = hiddens[:, 1:self.num_classes+1, :]
+            predicts = torch.einsum('bd,bcd->bc', cls_feats, label_feats)
+        outputs = {
+            'predicts': predicts,
+            'cls_feats': cls_feats,
+            'label_feats': label_feats
+        }
+        return outputs
+    def train(self, args):
+        train_dataloader, test_dataloader = load_data(dataset=self.args.dataset,
+                                                      data_dir=self.args.data_dir,
+                                                      tokenizer=self.tokenizer,
+                                                      train_batch_size=self.args.train_batch_size,
+                                                      test_batch_size=self.args.test_batch_size,
+                                                      model_name=self.args.model_name,
+                                                      method=self.args.method,
+                                                      workers=0)
+        _params = filter(lambda p: p.requires_grad, self.model.parameters())
+        if self.args.method == 'ce':
+            criterion = CELoss()
+        elif self.args.method == 'scl':
+            criterion = SupConLoss(self.args.alpha, self.args.temp)
+        elif self.args.method == 'dualcl':
+            criterion = DualLoss(self.args.alpha, self.args.temp)
+        else:
+            raise ValueError('unknown method')
+        optimizer = torch.optim.AdamW(_params, lr=self.args.lr)
+        total_steps = len(train_dataloader)*args.num_epoch
+        scheduler = get_linear_schedule_with_warmup(optimizer=optimizer, num_training_steps=total_steps, num_warmup_steps=50)
+        best_loss, best_acc = 0, 0
+        for epoch in range(self.args.num_epoch):
+            train_loss, train_acc = self._train(train_dataloader, criterion, optimizer, scheduler)
+            test_loss, test_acc = self._test(test_dataloader, criterion)
+            if test_acc > best_acc or (test_acc == best_acc and test_loss < best_loss):
+                best_acc, best_loss = test_acc, test_loss
+            self.logger.info('{}/{} - {:.2f}%'.format(epoch+1, self.args.num_epoch, 100*(epoch+1)/self.args.num_epoch))
+            self.logger.info('[train] loss: {:.4f}, acc: {:.2f}'.format(train_loss, train_acc*100))
+            self.logger.info('[test] loss: {:.4f}, acc: {:.2f}'.format(test_loss, test_acc*100))
+        self.logger.info('best loss: {:.4f}, best acc: {:.2f}'.format(best_loss, best_acc*100))
+        self.logger.info('log saved: {}'.format(self.args.log_name))
+
+

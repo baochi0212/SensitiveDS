@@ -17,7 +17,11 @@ class Strategy:
         if neg_idxs:
             self.dataset.labeled_idxs[neg_idxs] = False
 
-    def train(self):
+    def train(self, args=None):
+        if args:
+            self.net.train(args)
+            return
+
         labeled_idxs, labeled_data = self.dataset.get_labeled_data()
         self.net.train(labeled_data)
 
