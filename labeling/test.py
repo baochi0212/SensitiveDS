@@ -20,7 +20,7 @@ for data_label in data_labels:
             if 'neutral' in label or 'neural' in label:
                 neutral_dict.append({'text': text, 'label': 'neutral'})    
             else:
-                if data_label in label:
+                if data_label in label or data_label in label[0]:
                     data_dict.append({'text': text, 'label': data_label})
                 else:
                     data_dict.append({'text': text, 'label': label[0]})
