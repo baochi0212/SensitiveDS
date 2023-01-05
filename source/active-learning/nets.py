@@ -191,7 +191,7 @@ class Netformer(nn.Module):
         else:
             raise ValueError('unknown method')
         optimizer = torch.optim.AdamW(_params, lr=self.args.lr)
-        total_steps = len(train_dataloader)*args.num_epoch
+        total_steps = len(train_dataloader)*self.args.num_epoch
         scheduler = get_linear_schedule_with_warmup(optimizer=optimizer, num_training_steps=total_steps, num_warmup_steps=50)
         best_loss, best_acc = 0, 0
         for epoch in range(self.args.num_epoch):
