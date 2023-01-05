@@ -180,15 +180,7 @@ class Netformer(nn.Module):
             predicts = torch.einsum('bd,bcd->bc', cls_feats, label_feats)
         predicts = F.softmax(predicts, -1)
         return predicts.cpu()
-    def train(self, args):
-        train_dataloader, test_dataloader = load_data(dataset=self.args.dataset,
-                                                      data_dir=self.args.data_dir,
-                                                      tokenizer=self.tokenizer,
-                                                      train_batch_size=self.args.train_batch_size,
-                                                      test_batch_size=self.args.test_batch_size,
-                                                      model_name=self.args.model_name,
-                                                      method=self.args.method,
-                                                      workers=0)
+    def train(self, train_dataloader, test_dataloader):
         _params = filter(lambda p: p.requires_grad, self.base_model.parameters())
         if self.args.method == 'ce':
             criterion = CELoss()

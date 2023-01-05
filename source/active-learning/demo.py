@@ -113,11 +113,11 @@ for rd in range(1, args.n_round+1):
     query_idxs = strategy.query(args.n_query)
 
 #     # update labels
-#     strategy.update(query_idxs)
-#     if not args.dataset_name:
-#         strategy.train(args)
-#     else:
-#         strategy.train()
+    strategy.update(query_idxs)
+    if not args.dataset_name:
+        strategy.train(args)
+    else:
+        strategy.train(train_dataloader, test_dataloader)
 
 
 #     # calculate accuracy

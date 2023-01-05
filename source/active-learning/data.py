@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 data_dir = "./data"
 class MyDataset(Dataset):
 
-    def __init__(self, raw_data, label_dict, tokenizer, model_name, method):
+    def __init__(self, raw_data, label_dict, tokenizer, model_name, method, mode='train'):
         label_list = list(label_dict.keys()) if method not in ['ce', 'scl'] else []
         sep_token = ['[SEP]'] if model_name in ['bert', 'phobert'] else ['</s>']
         dataset = list()
@@ -26,8 +26,11 @@ class MyDataset(Dataset):
 
             dataset.append((label_list + sep_token + tokens, label_id))
         self._dataset = dataset
-        #labeled index
-        self.labeled_idx = np.zeros(len(dataset))
+        if mode == 'train':
+                
+            self.n_pool = len(dataset)
+            self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
+
 
 
     def __getitem__(self, index):
@@ -35,6 +38,30 @@ class MyDataset(Dataset):
 
     def __len__(self):
         return len(self._dataset)
+
+    def initialize_labels(self, num):
+        # generate initial labeled pool
+        tmp_idxs = np.arange(self.n_pool)
+        np.random.shuffle(tmp_idxs)
+        self.labeled_idxs[tmp_idxs[:num]] = True
+    
+    def get_labeled_data(self):
+        labeled_idxs = np.arange(self.n_pool)[self.labeled_idxs]
+        return labeled_idxs, self.handler(self.X_train[labeled_idxs], self.Y_train[labeled_idxs])
+    
+    def get_unlabeled_data(self):
+        #in the reverse direction
+        unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
+        return unlabeled_idxs, self.handler(self.X_train[unlabeled_idxs], self.Y_train[unlabeled_idxs])
+    
+    def get_train_data(self):
+        return self.labeled_idxs.copy(), self.handler(self.X_train, self.Y_train)
+        
+    def get_test_data(self):
+        return self.handler(self.X_test, self.Y_test)
+    
+    def cal_test_acc(self, preds):
+        return 1.0 * (self.Y_test==preds).sum().item() / self.n_test
 class Data:
     def __init__(self, X_train, Y_train, X_test, Y_test, handler):
         self.X_train = X_train
@@ -100,6 +127,6 @@ def get_Sensitive(args):
     train_data = json.load(open(os.path.join(data_dir, 'sensitive_train.json'), 'r', encoding='utf-8'))
     test_data = json.load(open(os.path.join(data_dir, 'sensitive_test.json'), 'r', encoding='utf-8'))
     label_dict = {'insult': 0, 'religion': 1, 'terrorism': 2, 'politics': 3, 'neutral': 4}
-    trainset = MyDataset(train_data, label_dict, tokenizer, model_name, method)
-    testset = MyDataset(test_data, label_dict, tokenizer, model_name, method)
+    trainset = MyDataset(train_data, label_dict, tokenizer, model_name, method, mode='train')
+    testset = MyDataset(test_data, label_dict, tokenizer, model_name, method, mode='train')
     return trainset, testset

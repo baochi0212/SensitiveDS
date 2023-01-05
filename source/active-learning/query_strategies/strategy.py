@@ -17,13 +17,12 @@ class Strategy:
         if neg_idxs:
             self.dataset.labeled_idxs[neg_idxs] = False
 
-    def train(self, args=None):
+    def train(self, args=None, train_dataloader=None, test_dataloader=None):
         if args:
             self.net.train(args)
             return
 
-        labeled_idxs, labeled_data = self.dataset.get_labeled_data()
-        self.net.train(labeled_data)
+        self.net.train(train_dataloader, test_dataloader)
 
     def predict(self, data):
         preds = self.net.predict(data)
