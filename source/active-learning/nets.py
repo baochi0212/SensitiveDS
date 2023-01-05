@@ -215,7 +215,7 @@ class Transformer(nn.Module):
                                                       model_name=self.args.model_name,
                                                       method=self.args.method,
                                                       workers=0)
-        _params = filter(lambda p: p.requires_grad, self.model.parameters())
+        _params = filter(lambda p: p.requires_grad, self.base_model.parameters())
         if self.args.method == 'ce':
             criterion = CELoss()
         elif self.args.method == 'scl':
