@@ -229,7 +229,6 @@ class Netformer(nn.Module):
                 inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
                 targets = targets.to(self.args.device)
                 outputs = self.base_model(inputs)
-                print("OUTPUTS", outputs)
                 loss = criterion(outputs, targets)
                 test_loss += loss.item() * targets.size(0)
                 print(targets) #for verify sanity
