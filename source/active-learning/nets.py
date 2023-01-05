@@ -162,19 +162,11 @@ class CIFAR10_Net(nn.Module):
 
     def get_embedding_dim(self):
         return 50
-
-class Transformer(nn.Module):
-
-    def __init__(self, base_model, num_classes, method, args):
-        super().__init__()
-        self.base_model = base_model
-        self.num_classes = num_classes
-        self.method = method
-        self.linear = nn.Linear(base_model.config.hidden_size, num_classes)
-        self.dropout = nn.Dropout(0.5)
+class Netformer(nn.Module):
+    def __init__(self, base_model, args):
+        self.base_model = base_model 
         self.args = args
-        for param in base_model.parameters():
-            param.requires_grad_(True)
+
     def predict_prob(self, inputs):
         raw_outputs = self.base_model(**inputs)
         hiddens = raw_outputs.last_hidden_state
@@ -187,25 +179,6 @@ class Transformer(nn.Module):
             predicts = torch.einsum('bd,bcd->bc', cls_feats, label_feats)
         predicts = F.softmax(predicts, -1)
         return predicts.cpu()
-        
-        
-
-    def forward(self, inputs):
-        raw_outputs = self.base_model(**inputs)
-        hiddens = raw_outputs.last_hidden_state
-        cls_feats = hiddens[:, 0, :]
-        if self.method in ['ce', 'scl']:
-            label_feats = None
-            predicts = self.linear(self.dropout(cls_feats))
-        else:
-            label_feats = hiddens[:, 1:self.num_classes+1, :]
-            predicts = torch.einsum('bd,bcd->bc', cls_feats, label_feats)
-        outputs = {
-            'predicts': predicts,
-            'cls_feats': cls_feats,
-            'label_feats': label_feats
-        }
-        return outputs
     def train(self, args):
         train_dataloader, test_dataloader = load_data(dataset=self.args.dataset,
                                                       data_dir=self.args.data_dir,
@@ -238,8 +211,6 @@ class Transformer(nn.Module):
             self.logger.info('[test] loss: {:.4f}, acc: {:.2f}'.format(test_loss, test_acc*100))
         self.logger.info('best loss: {:.4f}, best acc: {:.2f}'.format(best_loss, best_acc*100))
         self.logger.info('log saved: {}'.format(self.args.log_name))
-
-    
     def predict(self, dataloader):
         if self.args.method == 'ce':
             criterion = CELoss()
@@ -251,12 +222,12 @@ class Transformer(nn.Module):
             raise ValueError('unknown method')
         test_loss, n_correct, n_test = 0, 0, 0
         y_true, y_pred = [], []
-        self.base_model.eval()
+        self.base_model().eval()
         with torch.no_grad():
             for inputs, targets in tqdm(dataloader, disable=self.args.backend, ascii=' >='):
                 inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
                 targets = targets.to(self.args.device)
-                outputs = self.base_model(**inputs)
+                outputs = self.forward(**inputs)
                 print("OUTPUTS", outputs)
                 loss = criterion(outputs, targets)
                 test_loss += loss.item() * targets.size(0)
@@ -267,5 +238,45 @@ class Transformer(nn.Module):
                 n_test += targets.size(0)
         print(classification_report(y_true, y_pred))
         return test_loss / n_test, n_correct / n_test
+
+    
+
+
+class Transformer(nn.Module):
+
+    def __init__(self, base_model, num_classes, method, args):
+        super().__init__()
+        self.base_model = base_model
+        self.num_classes = num_classes
+        self.method = method
+        self.linear = nn.Linear(base_model.config.hidden_size, num_classes)
+        self.dropout = nn.Dropout(0.5)
+        self.args = args
+        for param in base_model.parameters():
+            param.requires_grad_(True)
+
+        
+        
+
+    def forward(self, inputs):
+        raw_outputs = self.base_model(**inputs)
+        hiddens = raw_outputs.last_hidden_state
+        cls_feats = hiddens[:, 0, :]
+        if self.method in ['ce', 'scl']:
+            label_feats = None
+            predicts = self.linear(self.dropout(cls_feats))
+        else:
+            label_feats = hiddens[:, 1:self.num_classes+1, :]
+            predicts = torch.einsum('bd,bcd->bc', cls_feats, label_feats)
+        outputs = {
+            'predicts': predicts,
+            'cls_feats': cls_feats,
+            'label_feats': label_feats
+        }
+        return outputs
+
+
+    
+    
 
 

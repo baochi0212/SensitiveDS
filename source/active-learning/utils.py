@@ -1,7 +1,7 @@
 from torchvision import transforms
 from handlers import MNIST_Handler, SVHN_Handler, CIFAR10_Handler
 from data import get_MNIST, get_FashionMNIST, get_SVHN, get_CIFAR10, get_Sensitive
-from nets import Net, MNIST_Net, SVHN_Net, CIFAR10_Net, Transformer
+from nets import Net, MNIST_Net, SVHN_Net, CIFAR10_Net, Transformer, Netformer
 from query_strategies import RandomSampling, LeastConfidence, MarginSampling, EntropySampling, \
                              LeastConfidenceDropout, MarginSamplingDropout, EntropySamplingDropout, \
                              KMeansSampling, KCenterGreedy, BALDDropout, \
@@ -63,7 +63,8 @@ def get_net(name, device, args=None):
         return Net(CIFAR10_Net, params[name], device)
     elif name == 'sensitive':
         base_model = AutoModel.from_pretrained("bert-base-cased")
-        model = Transformer(base_model, args.num_classes, args.method, args)
+        base_model = Transformer(base_model, args.num_classes, args.method, args)
+        model = Netformer(base_model, args)
         return model
     
 def get_params(name):
