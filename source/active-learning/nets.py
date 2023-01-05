@@ -196,7 +196,7 @@ class Netformer(nn.Module):
                 outputs = self.base_model(inputs)
                 loss = criterion(outputs, targets)
                 test_loss += loss.item() * targets.size(0)
-                print(targets) #for verify sanity
+                # print(targets) #for verify sanity
                 n_correct += (torch.argmax(outputs['predicts'], -1) == targets).sum().item()
                 y_pred += torch.argmax(outputs['predicts'], -1).cpu().numpy().reshape(-1).tolist()
                 y_true += targets.cpu().numpy().reshape(-1).tolist()
@@ -236,11 +236,6 @@ class Netformer(nn.Module):
             test_loss, test_acc = self._test(test_dataloader, criterion)
             if test_acc > best_acc or (test_acc == best_acc and test_loss < best_loss):
                 best_acc, best_loss = test_acc, test_loss
-            self.logger.info('{}/{} - {:.2f}%'.format(epoch+1, self.args.num_epoch, 100*(epoch+1)/self.args.num_epoch))
-            self.logger.info('[train] loss: {:.4f}, acc: {:.2f}'.format(train_loss, train_acc*100))
-            self.logger.info('[test] loss: {:.4f}, acc: {:.2f}'.format(test_loss, test_acc*100))
-        self.logger.info('best loss: {:.4f}, best acc: {:.2f}'.format(best_loss, best_acc*100))
-        self.logger.info('log saved: {}'.format(self.args.log_name))
     def predict(self, dataloader):
         if self.args.method == 'ce':
             criterion = CELoss()
