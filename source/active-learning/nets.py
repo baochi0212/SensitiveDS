@@ -164,6 +164,7 @@ class CIFAR10_Net(nn.Module):
         return 50
 class Netformer(nn.Module):
     def __init__(self, base_model, args):
+        super().__init__()
         self.base_model = base_model 
         self.args = args
 
