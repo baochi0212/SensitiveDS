@@ -232,6 +232,7 @@ class Netformer(nn.Module):
         best_loss, best_acc = 0, 0
         for epoch in range(self.args.num_epoch):
             train_loss, train_acc = self._train(train_dataloader, criterion, optimizer, scheduler)
+            print("TEST DATA ???", test_dataloader)
             test_loss, test_acc = self._test(test_dataloader, criterion)
             if test_acc > best_acc or (test_acc == best_acc and test_loss < best_loss):
                 best_acc, best_loss = test_acc, test_loss
