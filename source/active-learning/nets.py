@@ -239,7 +239,7 @@ class Transformer(nn.Module):
         self.logger.info('log saved: {}'.format(self.args.log_name))
 
     
-    def predict(self, dataloader, criterion):
+    def predict(self, dataloader):
         if self.args.method == 'ce':
             criterion = CELoss()
         elif self.args.method == 'scl':

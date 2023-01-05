@@ -106,11 +106,11 @@ print("Round 0")
 preds = strategy.predict(test_dataloader)
 # print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
 
-# for rd in range(1, args.n_round+1):
-#     print(f"Round {rd}")
+for rd in range(1, args.n_round+1):
+    print(f"Round {rd}")
 
-#     # query
-#     query_idxs = strategy.query(args.n_query)
+    # query
+    query_idxs = strategy.query(args.n_query)
 
 #     # update labels
 #     strategy.update(query_idxs)
