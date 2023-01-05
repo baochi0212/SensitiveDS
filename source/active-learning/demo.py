@@ -78,7 +78,7 @@ torch.backends.cudnn.enabled = False
 # device
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
-tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base')
+tokenizer = AutoTokenizer.from_pretrained('bert-base-cased')
 
 train_dataset, test_dataset = get_dataset(args.dataset_name, args)
 train_dataloader, test_dataloader = load_data(dataset=args.dataset,
