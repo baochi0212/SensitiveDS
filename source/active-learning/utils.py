@@ -1,11 +1,12 @@
 from torchvision import transforms
 from handlers import MNIST_Handler, SVHN_Handler, CIFAR10_Handler
-from data import get_MNIST, get_FashionMNIST, get_SVHN, get_CIFAR10
-from nets import Net, MNIST_Net, SVHN_Net, CIFAR10_Net
+from data import get_MNIST, get_FashionMNIST, get_SVHN, get_CIFAR10, get_Sensitive
+from nets import Net, MNIST_Net, SVHN_Net, CIFAR10_Net, Transformer
 from query_strategies import RandomSampling, LeastConfidence, MarginSampling, EntropySampling, \
                              LeastConfidenceDropout, MarginSamplingDropout, EntropySamplingDropout, \
                              KMeansSampling, KCenterGreedy, BALDDropout, \
                              AdversarialBIM, AdversarialDeepFool
+from transformers import AutoModel
 
 params = {'MNIST':
               {'n_epoch': 10, 
@@ -39,7 +40,7 @@ def get_handler(name):
     elif name == 'CIFAR10':
         return CIFAR10_Handler
 
-def get_dataset(name):
+def get_dataset(name, args=None):
     if name == 'MNIST':
         return get_MNIST(get_handler(name))
     elif name == 'FashionMNIST':
@@ -48,10 +49,10 @@ def get_dataset(name):
         return get_SVHN(get_handler(name))
     elif name == 'CIFAR10':
         return get_CIFAR10(get_handler(name))
-    else:
-        raise NotImplementedError
+    elif name == 'sensitive':
+        return get_Sensitive(args)
         
-def get_net(name, device):
+def get_net(name, device, args=None):
     if name == 'MNIST':
         return Net(MNIST_Net, params[name], device)
     elif name == 'FashionMNIST':
@@ -60,8 +61,10 @@ def get_net(name, device):
         return Net(SVHN_Net, params[name], device)
     elif name == 'CIFAR10':
         return Net(CIFAR10_Net, params[name], device)
-    else:
-        raise NotImplementedError
+    elif name == 'sensitive':
+        base_model = AutoModel.from_pretrained("bert-base-cased")
+        model = Transformer(base_model, args.num_classes, args.method)
+        return model
     
 def get_params(name):
     return params[name]

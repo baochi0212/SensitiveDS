@@ -8,6 +8,7 @@ from tqdm import tqdm
 from loss_func import CELoss, SupConLoss, DualLoss
 from data_utils import load_data, text2dict
 from transformers import logging, AutoTokenizer, AutoModel, BertModel, BertConfig, get_linear_schedule_with_warmup
+from sklearn.metrics import classification_report
 
 class Net:
     def __init__(self, net, params, device):
@@ -173,8 +174,20 @@ class Transformer(nn.Module):
         self.dropout = nn.Dropout(0.5)
         for param in base_model.parameters():
             param.requires_grad_(True)
-    def predict_prob(self):
-        pass
+    def predict_prob(self, inputs):
+        raw_outputs = self.base_model(**inputs)
+        hiddens = raw_outputs.last_hidden_state
+        cls_feats = hiddens[:, 0, :]
+        if self.method in ['ce', 'scl']:
+            label_feats = None
+            predicts = self.linear(self.dropout(cls_feats))
+        else:
+            label_feats = hiddens[:, 1:self.num_classes+1, :]
+            predicts = torch.einsum('bd,bcd->bc', cls_feats, label_feats)
+        predicts = F.softmax(predicts, -1)
+        return predicts.cpu()
+        
+        
 
     def forward(self, inputs):
         raw_outputs = self.base_model(**inputs)
@@ -224,5 +237,33 @@ class Transformer(nn.Module):
             self.logger.info('[test] loss: {:.4f}, acc: {:.2f}'.format(test_loss, test_acc*100))
         self.logger.info('best loss: {:.4f}, best acc: {:.2f}'.format(best_loss, best_acc*100))
         self.logger.info('log saved: {}'.format(self.args.log_name))
+
+    
+    def predict(self, dataloader, criterion):
+        if self.args.method == 'ce':
+            criterion = CELoss()
+        elif self.args.method == 'scl':
+            criterion = SupConLoss(self.args.alpha, self.args.temp)
+        elif self.args.method == 'dualcl':
+            criterion = DualLoss(self.args.alpha, self.args.temp)
+        else:
+            raise ValueError('unknown method')
+        test_loss, n_correct, n_test = 0, 0, 0
+        y_true, y_pred = [], []
+        self.model.eval()
+        with torch.no_grad():
+            for inputs, targets in tqdm(dataloader, disable=self.args.backend, ascii=' >='):
+                inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
+                targets = targets.to(self.args.device)
+                outputs = self.model(inputs)
+                loss = criterion(outputs, targets)
+                test_loss += loss.item() * targets.size(0)
+                print(targets) #for verify sanity
+                n_correct += (torch.argmax(outputs['predicts'], -1) == targets).sum().item()
+                y_pred += torch.argmax(outputs['predicts'], -1).cpu().numpy().reshape(-1).tolist()
+                y_true += targets.cpu().numpy().reshape(-1).tolist()
+                n_test += targets.size(0)
+        print(classification_report(y_true, y_pred))
+        return test_loss / n_test, n_correct / n_test
 
 

@@ -1,7 +1,40 @@
 import numpy as np
 import torch
 from torchvision import datasets
+import os
+import json
+import torch
+from functools import partial
+from torch.utils.data import Dataset, DataLoader
+from transformers import AutoTokenizer
+import fuckit
+from sklearn.model_selection import train_test_split
+data_dir = "./data"
+class MyDataset(Dataset):
 
+    def __init__(self, raw_data, label_dict, tokenizer, model_name, method):
+        label_list = list(label_dict.keys()) if method not in ['ce', 'scl'] else []
+        sep_token = ['[SEP]'] if model_name in ['bert', 'phobert'] else ['</s>']
+        dataset = list()
+        for data in raw_data:
+            tokens = data['text'].lower().split(' ')
+            label = '[' + str(data['label']) + ']' if '[' in list(label_dict.keys())[0] else str(data['label'])
+            if  label not in label_dict:
+                label_id = 0
+            else:
+                label_id = label_dict[label]
+
+            dataset.append((label_list + sep_token + tokens, label_id))
+        self._dataset = dataset
+        #labeled index
+        self.labeled_idx = np.zeros(len(dataset))
+
+
+    def __getitem__(self, index):
+        return self._dataset[index]
+
+    def __len__(self):
+        return len(self._dataset)
 class Data:
     def __init__(self, X_train, Y_train, X_test, Y_test, handler):
         self.X_train = X_train
@@ -26,6 +59,7 @@ class Data:
         return labeled_idxs, self.handler(self.X_train[labeled_idxs], self.Y_train[labeled_idxs])
     
     def get_unlabeled_data(self):
+        #in the reverse direction
         unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
         return unlabeled_idxs, self.handler(self.X_train[unlabeled_idxs], self.Y_train[unlabeled_idxs])
     
@@ -58,3 +92,14 @@ def get_CIFAR10(handler):
     data_train = datasets.CIFAR10('./data/CIFAR10', train=True, download=True)
     data_test = datasets.CIFAR10('./data/CIFAR10', train=False, download=True)
     return Data(data_train.data[:40000], torch.LongTensor(data_train.targets)[:40000], data_test.data[:40000], torch.LongTensor(data_test.targets)[:40000], handler)
+
+def get_Sensitive(args):
+    tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base')
+    model_name = args.model_name
+    method = args.method
+    train_data = json.load(open(os.path.join(data_dir, 'sensitive_train.json'), 'r', encoding='utf-8'))
+    test_data = json.load(open(os.path.join(data_dir, 'sensitive_test.json'), 'r', encoding='utf-8'))
+    label_dict = {'insult': 0, 'religion': 1, 'terrorism': 2, 'politics': 3, 'neutral': 4}
+    trainset = MyDataset(train_data, label_dict, tokenizer, model_name, method)
+    testset = MyDataset(test_data, label_dict, tokenizer, model_name, method)
+    return trainset, testset
