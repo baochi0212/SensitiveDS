@@ -65,7 +65,7 @@ def get_net(name, device, args=None):
         base_model = AutoModel.from_pretrained("bert-base-cased")
         base_model = Transformer(base_model, args.num_classes, args.method, args)
         model = Netformer(base_model, args)
-        return model
+        return model.to(device)
     
 def get_params(name):
     return params[name]
