@@ -165,13 +165,14 @@ class CIFAR10_Net(nn.Module):
 
 class Transformer(nn.Module):
 
-    def __init__(self, base_model, num_classes, method):
+    def __init__(self, base_model, num_classes, method, args):
         super().__init__()
         self.base_model = base_model
         self.num_classes = num_classes
         self.method = method
         self.linear = nn.Linear(base_model.config.hidden_size, num_classes)
         self.dropout = nn.Dropout(0.5)
+        self.args = args
         for param in base_model.parameters():
             param.requires_grad_(True)
     def predict_prob(self, inputs):

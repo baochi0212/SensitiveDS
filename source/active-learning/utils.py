@@ -63,7 +63,7 @@ def get_net(name, device, args=None):
         return Net(CIFAR10_Net, params[name], device)
     elif name == 'sensitive':
         base_model = AutoModel.from_pretrained("bert-base-cased")
-        model = Transformer(base_model, args.num_classes, args.method)
+        model = Transformer(base_model, args.num_classes, args.method, args)
         return model
     
 def get_params(name):
