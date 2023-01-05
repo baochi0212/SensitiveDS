@@ -31,7 +31,7 @@ class MyDataset(Dataset):
             self.n_pool = len(dataset)
             self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
 
-        self.labeled_dataset = self._dataset[self.labeled_idxs]
+        # self.labeled_dataset = self._dataset[self.labeled_idxs]
 
     def __getitem__(self, index):
         return self._dataset[index]
