@@ -19,10 +19,9 @@ class Strategy:
 
     def train(self, args=None, train_dataloader=None, test_dataloader=None):
         if args:
-            self.net.train(args)
+            self.net.train(train_dataloader, test_dataloader)
             return
 
-        self.net.train(train_dataloader, test_dataloader)
 
     def predict(self, data):
         preds = self.net.predict(data)
