@@ -39,7 +39,7 @@ parser.add_argument('--device', type=str, default='cuda' if torch.cuda.is_availa
 
 parser.add_argument('--seed', type=int, default=1, help="random seed")
 parser.add_argument('--n_init_labeled', type=int, default=10000, help="number of init labeled samples")
-parser.add_argument('--n_query', type=int, default=1000, help="number of queries per round")
+parser.add_argument('--n_query', type=int, default=100, help="number of queries per round")
 parser.add_argument('--n_round', type=int, default=10, help="number of rounds")
 parser.add_argument('--dataset_name', type=str, default=None, choices=["MNIST", "FashionMNIST", "SVHN", "CIFAR10", "sensitive"], help="dataset")
 parser.add_argument('--strategy_name', type=str, default="RandomSampling", 
