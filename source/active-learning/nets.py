@@ -170,11 +170,11 @@ class Netformer(nn.Module):
 
     def _train(self, dataloader, criterion, optimizer, scheduler):
         train_loss, n_correct, n_train = 0, 0, 0
-        self.model.train()
+        self.base_model.train()
         for inputs, targets in tqdm(dataloader, disable=self.args.backend, ascii=' >='):
             inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
             targets = targets.to(self.args.device)
-            outputs = self.model(inputs)
+            outputs = self.base_model(inputs)
             loss = criterion(outputs, targets)
             optimizer.zero_grad()
             loss.backward()
