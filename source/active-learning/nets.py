@@ -168,6 +168,23 @@ class Netformer(nn.Module):
         self.base_model = base_model 
         self.args = args
 
+    def _train(self, dataloader, criterion, optimizer, scheduler):
+        train_loss, n_correct, n_train = 0, 0, 0
+        self.model.train()
+        for inputs, targets in tqdm(dataloader, disable=self.args.backend, ascii=' >='):
+            inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
+            targets = targets.to(self.args.device)
+            outputs = self.model(inputs)
+            loss = criterion(outputs, targets)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            scheduler.step()
+            train_loss += loss.item() * targets.size(0)
+            n_correct += (torch.argmax(outputs['predicts'], -1) == targets).sum().item()
+            n_train += targets.size(0)
+        return train_loss / n_train, n_correct / n_train
+
     def predict_prob(self, inputs):
         raw_outputs = self.base_model(**inputs)
         hiddens = raw_outputs.last_hidden_state
