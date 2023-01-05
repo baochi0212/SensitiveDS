@@ -188,12 +188,12 @@ class Netformer(nn.Module):
     def _test(self, dataloader, criterion):
         test_loss, n_correct, n_test = 0, 0, 0
         y_true, y_pred = [], []
-        self.model.eval()
+        self.base_model.eval()
         with torch.no_grad():
             for inputs, targets in tqdm(dataloader, disable=self.args.backend, ascii=' >='):
                 inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
                 targets = targets.to(self.args.device)
-                outputs = self.model(inputs)
+                outputs = self.base_model(inputs)
                 loss = criterion(outputs, targets)
                 test_loss += loss.item() * targets.size(0)
                 print(targets) #for verify sanity
