@@ -228,7 +228,7 @@ class Netformer(nn.Module):
             for inputs, targets in tqdm(dataloader, disable=self.args.backend, ascii=' >='):
                 inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
                 targets = targets.to(self.args.device)
-                outputs = self.forward(**inputs)
+                outputs = self.base_model(**inputs)
                 print("OUTPUTS", outputs)
                 loss = criterion(outputs, targets)
                 test_loss += loss.item() * targets.size(0)
