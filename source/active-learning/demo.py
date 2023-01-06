@@ -132,5 +132,5 @@ for rd in range(1, args.n_round+1):
 
 
     # calculate accuracy
-    print(f"ROUND {rd}")
+    print(f"*******************ROUND {rd}")
     preds = strategy.predict(test_dataloader)

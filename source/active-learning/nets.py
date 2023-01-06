@@ -231,8 +231,8 @@ class Netformer(nn.Module):
         scheduler = get_linear_schedule_with_warmup(optimizer=optimizer, num_training_steps=total_steps, num_warmup_steps=50)
         best_loss, best_acc = 0, 0
         for epoch in range(self.args.num_epoch):
+            print(f"Epoch {epoch}")
             train_loss, train_acc = self._train(train_dataloader, criterion, optimizer, scheduler)
-            print("TEST DATA ???", test_dataloader)
             test_loss, test_acc = self._test(test_dataloader, criterion)
             if test_acc > best_acc or (test_acc == best_acc and test_loss < best_loss):
                 best_acc, best_loss = test_acc, test_loss
