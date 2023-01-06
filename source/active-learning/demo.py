@@ -145,7 +145,7 @@ print(f"number of testing pool: {len(test_dataset)}")
 print("Round 0")
 strategy.train()
 preds = strategy.predict(test_dataloader)
-print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
+# print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
 
 for rd in range(1, args.n_round+1):
     print(f"Round {rd}")
