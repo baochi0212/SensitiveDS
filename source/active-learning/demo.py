@@ -107,14 +107,14 @@ use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 tokenizer = AutoTokenizer.from_pretrained(args.pretrained_model)
 train_dataset, test_dataset = get_dataset(args.dataset_name, args)
-train_dataloader, test_dataloader = load_data(dataset=args.dataset,
-                                                      data_dir=args.data_dir,
-                                                      tokenizer=tokenizer,
-                                                      train_batch_size=args.train_batch_size,
-                                                      test_batch_size=args.test_batch_size,
-                                                      model_name=args.model_name,
-                                                      method=args.method,
-                                                      workers=0)
+# train_dataloader, test_dataloader = load_data(dataset=args.dataset,
+#                                                       data_dir=args.data_dir,
+#                                                       tokenizer=tokenizer,
+#                                                       train_batch_size=args.train_batch_size,
+#                                                       test_batch_size=args.test_batch_size,
+#                                                       model_name=args.model_name,
+#                                                       method=args.method,
+#                                                       workers=0)
 
 collate_fn = partial(my_collate, tokenizer=tokenizer, method=args.method, num_classes=len(args.label_dict))
 train_dataloader = data.DataLoader(train_dataset, args.train_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)

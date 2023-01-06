@@ -26,17 +26,17 @@ class MyDataset(Dataset):
 
             dataset.append((label_list + sep_token + tokens, label_id))
         self._dataset = dataset
-        # if mode == 'train':
+        if mode == 'train':
                 
-        #     self.n_pool = len(dataset)
-        #     #labeled state
-        #     self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
-        #     print("#######NUM LABELED", sum(self.labeled_idxs))
-        #     #labeled set for training
-        #     self.labeled_dataset = []
-        #     for i in range(len(dataset)):
-        #         if self.labeled_idxs[i]:
-        #             self.labeled_dataset.append(dataset[i])
+            self.n_pool = len(dataset)
+            #labeled state
+            self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
+            print("#######NUM LABELED", sum(self.labeled_idxs))
+            #labeled set for training
+            self.labeled_dataset = []
+            for i in range(len(dataset)):
+                if self.labeled_idxs[i]:
+                    self.labeled_dataset.append(dataset[i])
 
     def __getitem__(self, index):
         return self._dataset[index]
