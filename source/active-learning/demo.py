@@ -109,8 +109,8 @@ train_dataset, test_dataset = get_dataset(args.dataset_name, args)
 #                                                       model_name=args.model_name,
 #                                                       method=args.method,
 #                                                       workers=0)
-train_dataloader = data.DataLoader(train_dataset, batch_size=args.train_batch_size, shuffle=True, collate_fn=collate_fn)
-test_dataloader = data.DataLoader(test_dataset, batch_size=args.test_batch_size, shuffle=False, collate_fn=collate_fn)
+train_dataloader = data.DataLoader(train_dataset, batch_size=args.train_batch_size, shuffle=True, collate_fn=my_collate)
+test_dataloader = data.DataLoader(test_dataset, batch_size=args.test_batch_size, shuffle=False, collate_fn=my_collate)
 
 # dataset = get_dataset(args.dataset_name)                   # load dataset
 net = get_net(args.dataset_name, device, args)                   # load network
