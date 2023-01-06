@@ -44,7 +44,7 @@ parser.add_argument('--method', type=str, default='dualcl', choices=['ce', 'scl'
 ''' Optimization '''
 parser.add_argument('--train_batch_size', type=int, default=16)
 parser.add_argument('--test_batch_size', type=int, default=64)
-parser.add_argument('--num_epoch', type=int, default=100)
+parser.add_argument('--num_epoch', type=int, default=1)
 parser.add_argument('--lr', type=float, default=5e-6)
 parser.add_argument('--decay', type=float, default=0.01)
 parser.add_argument('--alpha', type=float, default=0.5)
@@ -133,6 +133,7 @@ net = get_net(args.dataset_name, device, args)                   # load network
             - NET.train(TRAIN_SET)
             - NET.test(TEST_SET)
 '''
+#STRATEGY OBJECT    
 strategy = get_strategy(args.strategy_name)(train_dataset, net)  # load strategy
 # # start experiment
 # dataset.initialize_labels(args.n_init_labeled)
@@ -142,26 +143,31 @@ print(f"number of testing pool: {len(test_dataset)}")
 
 # round 0 accuracy
 print("Round 0")
-# strategy.train()
-# preds = strategy.predict(test_dataloader)
+strategy.train()
+preds = strategy.predict(test_dataloader)
 # print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
 
 for rd in range(1, args.n_round+1):
-    print(f"*****************************Round {rd}")
+    print(f"Round {rd}")
+    #RELOAD MODEL
+    print(f"..........RELOAD MODEL...........")
+    strategy.net = get_net(args.dataset_name, device, args) 
     #QUERY SAMPLES
     query_idxs = strategy.query(args.n_query)
 
     #UPDATE TRAIN_SET
     strategy.update(query_idxs)
+    #LOADER
     train_dataloader = data.DataLoader(train_dataset, args.train_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)
     test_dataloader = data.DataLoader(test_dataset, args.test_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)
-    print("                              NUM LABELED", sum(train_dataset.labeled_idxs))
-    print("                              NUM BATCH", len(train_dataloader))
+    print("------------------------------NUM LABELED", sum(train_dataset.labeled_idxs))
+    print("------------------------------NUM BATCH", len(train_dataloader))
+    #TRAIN
     if not args.dataset_name:
         strategy.train(args, train_dataloader, test_dataloader)
     else:
         strategy.train(args, train_dataloader, test_dataloader)
 
 
-    #PREDICTION
+    #PREDICTION 
     preds = strategy.predict(test_dataloader)
