@@ -115,6 +115,7 @@ train_dataloader, test_dataloader = load_data(dataset=args.dataset,
                                                       model_name=args.model_name,
                                                       method=args.method,
                                                       workers=0)
+print("LENGTH LABEL DICT", len(label_dict))
 collate_fn = partial(my_collate, tokenizer=tokenizer, method=args.method, num_classes=len(label_dict))
 train_dataloader = data.DataLoader(train_dataset, args.train_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)
 test_dataloader = data.DataLoader(test_dataset, args.test_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)
