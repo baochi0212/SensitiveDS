@@ -6,6 +6,7 @@ import os
 import sys
 import time
 import torch
+from functools import partial
 import random
 import logging
 import argparse
@@ -15,6 +16,7 @@ from data_utils import load_data, text2dict
 from utils import get_dataset, get_net, get_strategy
 from transformers import AutoTokenizer
 from torch.utils import data
+
 
 def my_collate(batch, tokenizer, method, num_classes):
     tokens, label_ids = map(list, zip(*batch))
