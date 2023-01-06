@@ -17,6 +17,7 @@ class Strategy:
         for i in range(len(self.dataset._dataset)):
                 if self.dataset.labeled_idxs[i]:
                     self.dataset.labeled_dataset.append(self.dataset._dataset[i])
+                else:
                     self.dataset.unlabeled_dataset.remove(self.dataset._dataset[i])
         if neg_idxs:
             self.dataset.labeled_idxs[neg_idxs] = False
