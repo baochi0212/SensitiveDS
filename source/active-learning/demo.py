@@ -116,8 +116,8 @@ train_dataset, test_dataset = get_dataset(args.dataset_name, args)
 #                                                       method=args.method,
 #                                                       workers=0)
 collate_fn = partial(my_collate, tokenizer=tokenizer, method=args.method, num_classes=len(label_dict))
-train_dataloader = DataLoader(trainset, train_batch_size, shuffle=True, num_workers=workers, collate_fn=collate_fn, pin_memory=True)
-test_dataloader = DataLoader(testset, test_batch_size, shuffle=True, num_workers=workers, collate_fn=collate_fn, pin_memory=True)
+train_dataloader = data.DataLoader(train_dataset, args.train_batch_size, shuffle=True, collate_fn=collate_fn, pin_memory=True)
+test_dataloader = data.DataLoader(test_dataset, args.test_batch_size, shuffle=True, collate_fn=collate_fn, pin_memory=True)
 
 # dataset = get_dataset(args.dataset_name)                   # load dataset
 net = get_net(args.dataset_name, device, args)                   # load network
