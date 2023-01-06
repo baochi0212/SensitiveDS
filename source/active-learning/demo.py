@@ -149,6 +149,7 @@ preds = strategy.predict(test_dataloader)
 
 for rd in range(1, args.n_round+1):
     print(f"Round {rd}")
+    print("#######NUM LABELED", sum(train_dataset.labeled_idxs))
 
     # query
     query_idxs = strategy.query(args.n_query)

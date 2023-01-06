@@ -31,7 +31,6 @@ class MyDataset(Dataset):
             self.n_pool = len(dataset)
             #labeled state
             self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
-            print("#######NUM LABELED", sum(self.labeled_idxs))
             #labeled set for training
             self.labeled_dataset = []
             for i in range(len(dataset)):
