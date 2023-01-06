@@ -138,14 +138,14 @@ strategy = get_strategy(args.strategy_name)(train_dataset, net)  # load strategy
 # # start experiment
 # dataset.initialize_labels(args.n_init_labeled)
 print(f"number of labeled pool: {args.n_init_labeled}")
-# print(f"number of unlabeled pool: {train_dataset.n_pool-args.n_init_labeled}")
+print(f"number of unlabeled pool: {len(train_dataset._dataset)}")
 print(f"number of testing pool: {len(test_dataset)}")
 
 # round 0 accuracy
 print("Round 0")
 strategy.train()
 preds = strategy.predict(test_dataloader)
-# print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
+print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
 
 for rd in range(1, args.n_round+1):
     print(f"Round {rd}")
