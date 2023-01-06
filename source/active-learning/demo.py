@@ -153,7 +153,7 @@ for rd in range(1, args.n_round+1):
     print(f"..........RELOAD MODEL...........")
     strategy.net = get_net(args.dataset_name, device, args) 
     #QUERY SAMPLES
-    query_idxs = strategy.query(args.n_query)
+    query_idxs = strategy.query(args.n_query, collate_fn=collate_fn)
 
     #UPDATE TRAIN_SET
     strategy.update(query_idxs)

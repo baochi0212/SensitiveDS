@@ -9,7 +9,7 @@ class Strategy:
         self.dataset = dataset
         self.net = net
 
-    def query(self, n):
+    def query(self, n, collate_fn=None):
         pass
 
     def update(self, pos_idxs, neg_idxs=None):
