@@ -10,6 +10,13 @@ from transformers import AutoTokenizer
 import fuckit
 from sklearn.model_selection import train_test_split
 data_dir = "./data"
+class UnlabeledSet(Dataset):
+    def __init__(self, unlabeled_dataset):
+        self.unlabeled_dataset = unlabeled_dataset
+    def __len__(self):
+        return len(self.unlabeled_dataset)
+    def __getitem__(self, idx):
+        return self.unlabeled_dataset[idx]
 class MyDataset(Dataset):
 
     def __init__(self, raw_data, label_dict, tokenizer, model_name, method, mode='train', args=None):
@@ -41,9 +48,14 @@ class MyDataset(Dataset):
             self.labeled_idxs[self.init_idxs] = True
             #labeled set for training
             self.labeled_dataset = []
+            self.unlabeled_dataset = []
+
             for i in range(len(self._dataset)):
                 if self.labeled_idxs[i]:
                     self.labeled_dataset.append(self._dataset[i])
+                else:
+                    self.unlabeled_dataset.append(self._dataset[i])
+                    
           
 
     def __getitem__(self, index):
@@ -71,8 +83,7 @@ class MyDataset(Dataset):
     
     def get_unlabeled_data(self):
         #in the reverse direction
-        unlabeled_idxs = np.arange(self.n_pool)[~self.labeled_idxs]
-        return unlabeled_idxs, self.handler(self.X_train[unlabeled_idxs], self.Y_train[unlabeled_idxs])
+        return np.where(self.labeled_idxs == False), self.unlabeled_dataset
     
     def get_train_data(self):
         return self.labeled_idxs.copy(), self.handler(self.X_train, self.Y_train)

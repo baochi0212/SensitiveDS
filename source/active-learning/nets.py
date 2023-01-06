@@ -204,18 +204,16 @@ class Netformer(nn.Module):
         print(classification_report(y_true, y_pred))
         return test_loss / n_test, n_correct / n_test
 
-    def predict_prob(self, inputs):
-        raw_outputs = self.base_model(**inputs)
-        hiddens = raw_outputs.last_hidden_state
-        cls_feats = hiddens[:, 0, :]
-        if self.method in ['ce', 'scl']:
-            label_feats = None
-            predicts = self.linear(self.dropout(cls_feats))
-        else:
-            label_feats = hiddens[:, 1:self.num_classes+1, :]
-            predicts = torch.einsum('bd,bcd->bc', cls_feats, label_feats)
-        predicts = F.softmax(predicts, -1)
-        return predicts.cpu()
+    def predict_prob(self, dataloader):
+        self.base_model.eval()
+        probs = []
+        with torch.no_grad():
+            for inputs, targets in tqdm(dataloader, disable=self.args.backend, ascii=' >='):
+                inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
+                targets = targets.to(self.args.device)
+                outputs = self.base_model(inputs)
+                probs.append(F.softmax(outputs['predicts'][-1]))
+        return probs
     def train(self, train_dataloader, test_dataloader):
         _params = filter(lambda p: p.requires_grad, self.base_model.parameters())
         if self.args.method == 'ce':
