@@ -92,7 +92,18 @@ train_dataloader, test_dataloader = load_data(dataset=args.dataset,
 
 # dataset = get_dataset(args.dataset_name)                   # load dataset
 net = get_net(args.dataset_name, device, args)                   # load network
-
+'''
+** interation:
+    - round 0: 
+        - net.test(TEST_SET)
+        - check the number of labeled/unlabeled/testing samples
+    - for i in 1:n:
+        round i:
+            - idxs = strategy.query()
+            - TRAIN_SET.update(idxs)
+            - NET.train(TRAIN_SET)
+            - NET.test(TEST_SET)
+'''
 strategy = get_strategy(args.strategy_name)(train_dataset, net)  # load strategy
 # # start experiment
 # dataset.initialize_labels(args.n_init_labeled)
@@ -120,6 +131,6 @@ for rd in range(1, args.n_round+1):
         strategy.train(args, train_dataloader, test_dataloader)
 
 
-#     # calculate accuracy
-#     preds = strategy.predict(dataset.get_test_data())
-#     print(f"Round {rd} testing accuracy: {dataset.cal_test_acc(preds)}")
+    # calculate accuracy
+    print(f"ROUND {rd}")
+    preds = strategy.predict(test_dataloader)
