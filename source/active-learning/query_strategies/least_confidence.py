@@ -29,5 +29,5 @@ class LeastConfidence(Strategy):
         probs = self.predict_prob(loader)
         print(unlabeled_idxs[0].shape)
         uncertainties = probs
-        return unlabeled_idxs[uncertainties.sort()[1][:n].numpy()]
+        return unlabeled_idxs[0][uncertainties.sort()[1][:n].numpy()]
 
