@@ -107,17 +107,17 @@ use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
 tokenizer = AutoTokenizer.from_pretrained('bert-base-cased')
 train_dataset, test_dataset = get_dataset(args.dataset_name, args)
-# train_dataloader, test_dataloader = load_data(dataset=args.dataset,
-#                                                       data_dir=args.data_dir,
-#                                                       tokenizer=tokenizer,
-#                                                       train_batch_size=args.train_batch_size,
-#                                                       test_batch_size=args.test_batch_size,
-#                                                       model_name=args.model_name,
-#                                                       method=args.method,
-#                                                       workers=0)
-collate_fn = partial(my_collate, tokenizer=tokenizer, method=args.method, num_classes=len(label_dict))
-train_dataloader = data.DataLoader(train_dataset, args.train_batch_size, shuffle=True, collate_fn=collate_fn, pin_memory=True)
-test_dataloader = data.DataLoader(test_dataset, args.test_batch_size, shuffle=True, collate_fn=collate_fn, pin_memory=True)
+train_dataloader, test_dataloader = load_data(dataset=args.dataset,
+                                                      data_dir=args.data_dir,
+                                                      tokenizer=tokenizer,
+                                                      train_batch_size=args.train_batch_size,
+                                                      test_batch_size=args.test_batch_size,
+                                                      model_name=args.model_name,
+                                                      method=args.method,
+                                                      workers=0)
+# collate_fn = partial(my_collate, tokenizer=tokenizer, method=args.method, num_classes=len(label_dict))
+# train_dataloader = data.DataLoader(train_dataset, args.train_batch_size, shuffle=True, collate_fn=collate_fn, pin_memory=True)
+# test_dataloader = data.DataLoader(test_dataset, args.test_batch_size, shuffle=True, collate_fn=collate_fn, pin_memory=True)
 
 # dataset = get_dataset(args.dataset_name)                   # load dataset
 net = get_net(args.dataset_name, device, args)                   # load network
