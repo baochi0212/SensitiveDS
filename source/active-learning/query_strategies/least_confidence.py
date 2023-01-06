@@ -25,9 +25,9 @@ class LeastConfidence(Strategy):
     def query(self, n, collate_fn=None):
         unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
         unlabeled_dataset = UnlabeledSet(unlabeled_data)
-        loader = data.DataLoader(unlabeled_dataset, batch_size=1, shuffle=False, collate_fn=collate_fn)
+        loader = data.DataLoader(unlabeled_dataset[:200], batch_size=1, shuffle=False, collate_fn=collate_fn)
         probs = self.predict_prob(loader)
         print("MLE", probs)
         uncertainties = probs
-        return unlabeled_idxs[uncertainties.sort()[1][:n]]
+        return unlabeled_idxs[uncertainties.sort()[1][:n].numpy()]
 
