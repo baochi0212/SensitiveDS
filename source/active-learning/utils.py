@@ -62,7 +62,7 @@ def get_net(name, device, args=None):
     elif name == 'CIFAR10':
         return Net(CIFAR10_Net, params[name], device)
     elif name == 'sensitive':
-        base_model = AutoModel.from_pretrained("bert-base-cased")
+        base_model = AutoModel.from_pretrained(args.pretrained_model)
         base_model = Transformer(base_model, args.num_classes, args.method, args)
         model = Netformer(base_model, args)
         return model.to(device)
