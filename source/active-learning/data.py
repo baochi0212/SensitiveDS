@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 data_dir = "./data"
 class MyDataset(Dataset):
 
-    def __init__(self, raw_data, label_dict, tokenizer, model_name, method, mode='train'):
+    def __init__(self, raw_data, label_dict, tokenizer, model_name, method, mode='train', args=None):
         #MODE
         self.mode = mode
 
@@ -37,7 +37,7 @@ class MyDataset(Dataset):
             #labeled state
             self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
             #init 100 for round 0:
-            self.init_idxs = np.random.randint(self.n_pool, size=100)
+            self.init_idxs = np.random.randint(self.n_pool, size=args.n_init_labeled)
             self.labeled_idxs[self.init_idxs] = True
             #labeled set for training
             self.labeled_dataset = []
@@ -148,7 +148,7 @@ def get_Sensitive(args):
         train_data = json.load(open(os.path.join(data_dir, 'SST2_Train.json'), 'r', encoding='utf-8'))
         test_data = json.load(open(os.path.join(data_dir, 'SST2_Test.json'), 'r', encoding='utf-8'))
     label_dict = args.label_dict
-    trainset = MyDataset(train_data, label_dict, tokenizer, model_name, method, mode='train')
-    testset = MyDataset(test_data, label_dict, tokenizer, model_name, method, mode='test')
+    trainset = MyDataset(train_data, label_dict, tokenizer, model_name, method, mode='train', args=args)
+    testset = MyDataset(test_data, label_dict, tokenizer, model_name, method, mode='test', args=args)
     
     return trainset, testset
