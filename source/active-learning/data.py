@@ -29,9 +29,13 @@ class MyDataset(Dataset):
         if mode == 'train':
                 
             self.n_pool = len(dataset)
+            #labeled state
             self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
-
-        self.labeled_dataset = self._dataset[self.labeled_idxs]
+            #labeled set for training
+            self.labeled_dataset = []
+            for i in range(len(dataset)):
+                if self.labeled_idxs[i]:
+                    self.labeled_dataset.append(dataset[i])
 
     def __getitem__(self, index):
         return self._dataset[index]
