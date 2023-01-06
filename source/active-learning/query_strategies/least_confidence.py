@@ -27,7 +27,7 @@ class LeastConfidence(Strategy):
         unlabeled_dataset = UnlabeledSet(unlabeled_data)
         loader = data.DataLoader(unlabeled_dataset[:200], batch_size=1, shuffle=False, collate_fn=collate_fn)
         probs = self.predict_prob(loader)
-        print(unlabeled_idxs.shape)
+        print(unlabeled_idxs[0].shape)
         uncertainties = probs
         return unlabeled_idxs[uncertainties.sort()[1][:n].numpy()]
 
