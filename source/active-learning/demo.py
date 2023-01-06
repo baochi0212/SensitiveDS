@@ -53,7 +53,7 @@ parser.add_argument('--temp', type=float, default=0.1)
 parser.add_argument('--backend', default=False, action='store_true')
 parser.add_argument('--timestamp', type=int, default='{:.0f}{:03}'.format(time.time(), random.randint(0, 999)))
 parser.add_argument('--device', type=str, default='cuda' if torch.cuda.is_available() else 'cpu')
-
+parser.add_argument('--pretrained_model', type=str, default='bert-base-cased')
 
 parser.add_argument('--seed', type=int, default=1, help="random seed")
 parser.add_argument('--n_init_labeled', type=int, default=10000, help="number of init labeled samples")
@@ -105,7 +105,7 @@ torch.backends.cudnn.enabled = False
 # device
 use_cuda = torch.cuda.is_available()
 device = torch.device("cuda" if use_cuda else "cpu")
-tokenizer = AutoTokenizer.from_pretrained('bert-base-cased')
+tokenizer = AutoTokenizer.from_pretrained(args.pretrained_model)
 train_dataset, test_dataset = get_dataset(args.dataset_name, args)
 train_dataloader, test_dataloader = load_data(dataset=args.dataset,
                                                       data_dir=args.data_dir,

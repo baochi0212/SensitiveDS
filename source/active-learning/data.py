@@ -126,7 +126,7 @@ def get_CIFAR10(handler):
     return Data(data_train.data[:40000], torch.LongTensor(data_train.targets)[:40000], data_test.data[:40000], torch.LongTensor(data_test.targets)[:40000], handler)
 
 def get_Sensitive(args):
-    tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base')
+    tokenizer = AutoTokenizer.from_pretrained(args.pretrained_model)
     model_name = args.model_name
     method = args.method
     train_data = json.load(open(os.path.join(data_dir, 'sensitive_train.json'), 'r', encoding='utf-8'))
