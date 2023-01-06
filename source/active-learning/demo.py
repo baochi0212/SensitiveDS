@@ -143,24 +143,25 @@ print(f"number of testing pool: {len(test_dataset)}")
 # round 0 accuracy
 print("Round 0")
 # strategy.train()
-preds = strategy.predict(test_dataloader)
+# preds = strategy.predict(test_dataloader)
 # print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
 
 for rd in range(1, args.n_round+1):
-    print(f"Round {rd}")
-    print("#######NUM LABELED", sum(train_dataset.labeled_idxs))
-
-    # query
+    print(f"*****************************Round {rd}")
+    #QUERY SAMPLES
     query_idxs = strategy.query(args.n_query)
 
-#     # update labels
+    #UPDATE TRAIN_SET
     strategy.update(query_idxs)
+    train_dataloader = data.DataLoader(train_dataset, args.train_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)
+    test_dataloader = data.DataLoader(test_dataset, args.test_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)
+    print("                              NUM LABELED", sum(train_dataset.labeled_idxs))
+    print("                              NUM BATCH", len(train_dataloader))
     if not args.dataset_name:
         strategy.train(args, train_dataloader, test_dataloader)
     else:
         strategy.train(args, train_dataloader, test_dataloader)
 
 
-    # calculate accuracy
-    print(f"*******************ROUND {rd}")
+    #PREDICTION
     preds = strategy.predict(test_dataloader)

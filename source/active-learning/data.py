@@ -13,6 +13,10 @@ data_dir = "./data"
 class MyDataset(Dataset):
 
     def __init__(self, raw_data, label_dict, tokenizer, model_name, method, mode='train'):
+        #MODE
+        self.mode = mode
+
+        #DATASET
         label_list = list(label_dict.keys()) if method not in ['ce', 'scl'] else []
         sep_token = ['[SEP]'] if model_name in ['bert', 'phobert'] else ['</s>']
         dataset = list()
@@ -26,22 +30,34 @@ class MyDataset(Dataset):
 
             dataset.append((label_list + sep_token + tokens, label_id))
         self._dataset = dataset
+        #ACTIVE LEARNING
         if mode == 'train':
                 
             self.n_pool = len(dataset)
             #labeled state
             self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
+            #init 100 for round 0:
+            self.init_idxs = np.random.randint(self.n_pool, size=100)
+            self.labeled_idxs[self.init_idxs] = True
             #labeled set for training
             self.labeled_dataset = []
-            for i in range(len(dataset)):
+            for i in range(len(self._dataset)):
                 if self.labeled_idxs[i]:
-                    self.labeled_dataset.append(dataset[i])
+                    self.labeled_dataset.append(self._dataset[i])
+          
 
     def __getitem__(self, index):
-        return self._dataset[index]
+        if self.mode != 'train':
+            return self._dataset[index]
+        else:
+            return self.labeled_dataset[index]
 
     def __len__(self):
-        return len(self._dataset)
+        if self.mode != 'train':
+            return len(self._dataset)
+        else:
+            return len(self.labeled_dataset)
+
 
     def initialize_labels(self, num):
         # generate initial labeled pool
