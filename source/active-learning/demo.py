@@ -16,6 +16,21 @@ from utils import get_dataset, get_net, get_strategy
 from transformers import AutoTokenizer
 from torch.utils import data
 
+def my_collate(batch, tokenizer, method, num_classes):
+    tokens, label_ids = map(list, zip(*batch))
+    text_ids = tokenizer(tokens,
+                         padding=True,
+                         truncation=True,
+                         max_length=256,
+                         is_split_into_words=True,
+                         add_special_tokens=True,
+                         return_tensors='pt')
+    if method not in ['ce', 'scl']:
+        positions = torch.zeros_like(text_ids['input_ids'])
+        positions[:, num_classes:] = torch.arange(0, text_ids['input_ids'].size(1)-num_classes)
+        text_ids['position_ids'] = positions
+    return text_ids, torch.tensor(label_ids)
+
 
 parser = argparse.ArgumentParser()
 num_classes = {'sst2': 2, 'subj': 2, 'trec': 6, 'pc': 2, 'cr': 2, 'phoATIS': 25, 'uit-nlp': 3, 'sensitive': 5}
@@ -64,6 +79,8 @@ if not os.path.exists('logs'):
     os.mkdir('logs')
 pprint(vars(args))
 
+
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -73,6 +90,8 @@ logger.addHandler(logging.FileHandler(os.path.join('logs', args.log_name)))
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 torch.backends.cudnn.enabled = False
+
+
 
 
 
@@ -90,8 +109,8 @@ train_dataset, test_dataset = get_dataset(args.dataset_name, args)
 #                                                       model_name=args.model_name,
 #                                                       method=args.method,
 #                                                       workers=0)
-train_dataloader = data.DataLoader(train_dataset, batch_size=args.train_batch_size, shuffle=True)
-test_dataloader = data.DataLoader(test_dataset, batch_size=args.test_batch_size, shuffle=False)
+train_dataloader = data.DataLoader(train_dataset, batch_size=args.train_batch_size, shuffle=True, collate_fn=collate_fn)
+test_dataloader = data.DataLoader(test_dataset, batch_size=args.test_batch_size, shuffle=False, collate_fn=collate_fn)
 
 # dataset = get_dataset(args.dataset_name)                   # load dataset
 net = get_net(args.dataset_name, device, args)                   # load network
