@@ -131,7 +131,7 @@ def get_Sensitive(args):
     method = args.method
     train_data = json.load(open(os.path.join(data_dir, 'sensitive_train.json'), 'r', encoding='utf-8'))
     test_data = json.load(open(os.path.join(data_dir, 'sensitive_test.json'), 'r', encoding='utf-8'))
-    label_dict = {'insult': 0, 'religion': 1, 'terrorism': 2, 'politics': 3, 'neutral': 4}
+    label_dict = args.label_dict
     trainset = MyDataset(train_data, label_dict, tokenizer, model_name, method, mode='train')
     testset = MyDataset(test_data, label_dict, tokenizer, model_name, method, mode='train')
     
