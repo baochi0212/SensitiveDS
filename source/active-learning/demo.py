@@ -115,12 +115,11 @@ train_dataset, test_dataset = get_dataset(args.dataset_name, args)
 #                                                       model_name=args.model_name,
 #                                                       method=args.method,
 #                                                       workers=0)
-
+# load dataset
 collate_fn = partial(my_collate, tokenizer=tokenizer, method=args.method, num_classes=len(args.label_dict))
 train_dataloader = data.DataLoader(train_dataset, args.train_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)
 test_dataloader = data.DataLoader(test_dataset, args.test_batch_size, shuffle=True, num_workers=0, collate_fn=collate_fn, pin_memory=True)
 
-# dataset = get_dataset(args.dataset_name)                   # load dataset
 net = get_net(args.dataset_name, device, args)                   # load network
 '''
 ** interation:
@@ -134,34 +133,34 @@ net = get_net(args.dataset_name, device, args)                   # load network
             - NET.train(TRAIN_SET)
             - NET.test(TEST_SET)
 '''
-strategy = get_strategy(args.strategy_name)(train_dataset, net)  # load strategy
-# # start experiment
-# dataset.initialize_labels(args.n_init_labeled)
-print(f"number of labeled pool: {args.n_init_labeled}")
-# print(f"number of unlabeled pool: {train_dataset.n_pool-args.n_init_labeled}")
-print(f"number of testing pool: {len(test_dataset)}")
+# strategy = get_strategy(args.strategy_name)(train_dataset, net)  # load strategy
+# # # start experiment
+# # dataset.initialize_labels(args.n_init_labeled)
+# print(f"number of labeled pool: {args.n_init_labeled}")
+# # print(f"number of unlabeled pool: {train_dataset.n_pool-args.n_init_labeled}")
+# print(f"number of testing pool: {len(test_dataset)}")
 
-# round 0 accuracy
-print("Round 0")
-# strategy.train()
-preds = strategy.predict(test_dataloader)
-# print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
+# # round 0 accuracy
+# print("Round 0")
+# # strategy.train()
+# preds = strategy.predict(test_dataloader)
+# # print(f"Round 0 testing accuracy: {dataset.cal_test_acc(preds)}")
 
-for rd in range(1, args.n_round+1):
-    print(f"Round {rd}")
-    print("#######NUM LABELED", sum(train_dataset.labeled_idxs))
+# for rd in range(1, args.n_round+1):
+#     print(f"Round {rd}")
+#     print("#######NUM LABELED", sum(train_dataset.labeled_idxs))
 
-    # query
-    query_idxs = strategy.query(args.n_query)
+#     # query
+#     query_idxs = strategy.query(args.n_query)
 
-#     # update labels
-    strategy.update(query_idxs)
-    if not args.dataset_name:
-        strategy.train(args, train_dataloader, test_dataloader)
-    else:
-        strategy.train(args, train_dataloader, test_dataloader)
+# #     # update labels
+#     strategy.update(query_idxs)
+#     if not args.dataset_name:
+#         strategy.train(args, train_dataloader, test_dataloader)
+#     else:
+#         strategy.train(args, train_dataloader, test_dataloader)
 
 
-    # calculate accuracy
-    print(f"*******************ROUND {rd}")
-    preds = strategy.predict(test_dataloader)
+#     # calculate accuracy
+#     print(f"*******************ROUND {rd}")
+#     preds = strategy.predict(test_dataloader)
