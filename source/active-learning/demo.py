@@ -80,6 +80,11 @@ args.log_name = '{}_{}_{}_{}.log'.format(args.dataset, args.model_name, args.met
 if not os.path.exists('logs'):
     os.mkdir('logs')
 pprint(vars(args))
+#LABEL DICT
+if args.dataset == 'sst2':
+    label_dict = {'positive': 0, 'negative': 1}
+elif args.dataset == 'sensitive':
+        label_dict = {'insult': 0, 'religion': 1, 'terrorism': 2, 'politics': 3, 'neutral': 4}
 
 
 
@@ -110,7 +115,7 @@ train_dataset, test_dataset = get_dataset(args.dataset_name, args)
 #                                                       model_name=args.model_name,
 #                                                       method=args.method,
 #                                                       workers=0)
-collate_fn = partial(my_collate, tokenizer=tokenizer, method=method, num_classes=len(label_dict))
+collate_fn = partial(my_collate, tokenizer=tokenizer, method=args.method, num_classes=len(label_dict))
 train_dataloader = data.DataLoader(train_dataset, batch_size=args.train_batch_size, shuffle=True, collate_fn=collate_fn)
 test_dataloader = data.DataLoader(test_dataset, batch_size=args.test_batch_size, shuffle=False, collate_fn=collate_fn)
 
