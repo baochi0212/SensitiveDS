@@ -15,9 +15,9 @@ class Strategy:
     def update(self, pos_idxs, neg_idxs=None):
         self.dataset.labeled_idxs[pos_idxs] = True
         for i in range(len(self.dataset._dataset)):
-                if self.dataset.labeled_idxs[i]:
+                if self.dataset.labeled_idxs[i] and self.dataset._dataset[i] not in self.dataset.labeled_dataset:
                     self.dataset.labeled_dataset.append(self.dataset._dataset[i])
-                else:
+                elif not self.dataset.labeled_idxs[i] and self.dataset._dataset[i] in self.dataset.unlabeled_dataset:
                     self.dataset.unlabeled_dataset.remove(self.dataset._dataset[i])
         if neg_idxs:
             self.dataset.labeled_idxs[neg_idxs] = False
