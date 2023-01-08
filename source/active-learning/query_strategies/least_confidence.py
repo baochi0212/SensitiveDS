@@ -31,5 +31,6 @@ class LeastConfidence(Strategy):
         uncertainties = probs
         #check the confusion
         print(f"MIN PROB vs MAX PROB {uncertainties.sort()[0][:n].numpy()[0], uncertainties.sort()[0][:n].numpy()[-1]}")
+        print(f"MIN vs MAX UNSELECTED{uncertainties.sort()[0].numpy()[0], uncertainties.sort()[0].numpy()[-1]}")
         return unlabeled_idxs[uncertainties.sort()[1][:n].numpy()]
 
