@@ -83,7 +83,7 @@ class MyDataset(Dataset):
     
     def get_unlabeled_data(self):
         #in the reverse direction
-        return np.where(self.labeled_idxs == False), self.unlabeled_dataset
+        return np.where(self.labeled_idxs == False)[0], self.unlabeled_dataset
     
     def get_train_data(self):
         return self.labeled_idxs.copy(), self.handler(self.X_train, self.Y_train)

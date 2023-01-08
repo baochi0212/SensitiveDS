@@ -24,13 +24,12 @@ class LeastConfidence(Strategy):
 
     def query(self, n, collate_fn=None):
         unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
-        print("---------UNLABELED DATA------------", len(unlabeled_data))
+        print("---------UNLABELED DATA CHECK------------", unlabeled_idxs.shape, unlablen(unlabeled_data))
         unlabeled_dataset = UnlabeledSet(unlabeled_data)
         loader = data.DataLoader(unlabeled_dataset, batch_size=1, shuffle=False, collate_fn=collate_fn)
         probs = self.predict_prob(loader)
-        print(unlabeled_idxs[0].shape)
         uncertainties = probs
         #check the confusion
         print(f"MIN PROB vs MAX PROB {uncertainties.sort()[0][:n].numpy()[0], uncertainties.sort()[0][:n].numpy()[-1]}")
-        return unlabeled_idxs[0][uncertainties.sort()[1][:n].numpy()]
+        return unlabeled_idxs[uncertainties.sort()[1][:n].numpy()]
 
