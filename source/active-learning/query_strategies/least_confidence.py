@@ -30,5 +30,7 @@ class LeastConfidence(Strategy):
         probs = self.predict_prob(loader)
         print(unlabeled_idxs[0].shape)
         uncertainties = probs
+        #check the confusion
+        print(f"MAX PROB {uncertainties.sort()[1][:n].numpy()[-1]}")
         return unlabeled_idxs[0][uncertainties.sort()[1][:n].numpy()]
 
