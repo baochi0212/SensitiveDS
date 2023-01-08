@@ -44,7 +44,7 @@ class MyDataset(Dataset):
             #labeled state
             self.labeled_idxs = np.zeros(self.n_pool, dtype=bool)
             #init 100 for round 0:
-            self.init_idxs = np.random.randint(self.n_pool, size=args.n_init_labeled+1)
+            self.init_idxs = np.arange(args.n_init_labeled)
             self.labeled_idxs[self.init_idxs] = True
             #labeled set for training
             self.labeled_dataset = []
