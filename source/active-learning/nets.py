@@ -212,7 +212,7 @@ class Netformer(nn.Module):
                 inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
                 targets = targets.to(self.args.device)
                 outputs = self.base_model(inputs)
-                probs.append(torch.max(F.softmax(outputs['predicts'][-1])).detach().cpu().item())
+                probs.append(torch.max(F.softmax(outputs['predicts'][-1], dim=-1)).detach().cpu().item())
         return torch.tensor(probs)
     def train(self, train_dataloader, test_dataloader):
         _params = filter(lambda p: p.requires_grad, self.base_model.parameters())
