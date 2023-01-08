@@ -158,6 +158,9 @@ def get_Sensitive(args):
     if args.dataset == 'sst2':
         train_data = json.load(open(os.path.join(data_dir, 'SST2_Train.json'), 'r', encoding='utf-8'))
         test_data = json.load(open(os.path.join(data_dir, 'SST2_Test.json'), 'r', encoding='utf-8'))
+    if args.dataset == 'sensitive':
+        train_data = json.load(open(os.path.join(data_dir, 'sensitive_train.json'), 'r', encoding='utf-8'))
+        test_data = json.load(open(os.path.join(data_dir, 'sensitive_test.json'), 'r', encoding='utf-8'))
     label_dict = args.label_dict
     trainset = MyDataset(train_data, label_dict, tokenizer, model_name, method, mode='train', args=args)
     testset = MyDataset(test_data, label_dict, tokenizer, model_name, method, mode='test', args=args)
