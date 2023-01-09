@@ -8,7 +8,7 @@ class EntropySampling(Strategy):
     def __init__(self, dataset, net):
         super(EntropySampling, self).__init__(dataset, net)
 
-    def query(self, n):
+    def query(self, n, collate_fn=None):
         unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
         print("---------UNLABELED DATA CHECK------------", unlabeled_idxs.shape, len(unlabeled_data))
         unlabeled_dataset = UnlabeledSet(unlabeled_data)
