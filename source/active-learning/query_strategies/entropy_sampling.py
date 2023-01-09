@@ -1,6 +1,8 @@
 import numpy as np
 import torch
 from .strategy import Strategy
+from torch.utils import data
+from data import UnlabeledSet
 
 class EntropySampling(Strategy):
     def __init__(self, dataset, net):
@@ -8,7 +10,10 @@ class EntropySampling(Strategy):
 
     def query(self, n):
         unlabeled_idxs, unlabeled_data = self.dataset.get_unlabeled_data()
-        probs = self.predict_prob(unlabeled_data)
+        print("---------UNLABELED DATA CHECK------------", unlabeled_idxs.shape, len(unlabeled_data))
+        unlabeled_dataset = UnlabeledSet(unlabeled_data)
+        loader = data.DataLoader(unlabeled_dataset, batch_size=1, shuffle=False, collate_fn=collate_fn)
+        probs = self.predict_prob(loader)
         log_probs = torch.log(probs)
         uncertainties = (probs*log_probs).sum(1)
         return unlabeled_idxs[uncertainties.sort()[1][:n]]
