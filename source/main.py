@@ -15,6 +15,7 @@ class Instructor:
         self.args = args
         self.logger = logger
         self.logger.info('> creating model {}'.format(args.model_name))
+        #MODEL DEFINE
         if args.model_name == 'bert':
             self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
             base_model = AutoModel.from_pretrained('bert-base-uncased')

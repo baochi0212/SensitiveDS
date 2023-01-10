@@ -232,6 +232,8 @@ class Netformer(nn.Module):
             print(f"Epoch {epoch}")
             train_loss, train_acc = self._train(train_dataloader, criterion, optimizer, scheduler)
             test_loss, test_acc = self._test(test_dataloader, criterion)
+            print(f"Train: {train_loss}, {train_acc}")
+            print(f"Test: {test_loss}, {test_acc}")
             if test_acc > best_acc or (test_acc == best_acc and test_loss < best_loss):
                 best_acc, best_loss = test_acc, test_loss
     def predict(self, dataloader):
