@@ -15,6 +15,5 @@ class EntropySampling(Strategy):
         loader = data.DataLoader(unlabeled_dataset, batch_size=1, shuffle=False, collate_fn=collate_fn)
         probs = self.predict_prob(loader)
         log_probs = torch.log(probs)
-        print(probs.shape)
         uncertainties = torch.sum(probs*log_probs, dim=1)
         return unlabeled_idxs[uncertainties.sort()[1][:n]]
