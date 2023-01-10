@@ -206,14 +206,14 @@ class Netformer(nn.Module):
 
     def predict_prob(self, dataloader):
         self.base_model.eval()
-        probs = []
+        probs = torch.tensor([])
         with torch.no_grad():
             for inputs, targets in tqdm(dataloader, disable=self.args.backend, ascii=' >='):
                 inputs = {k: v.to(self.args.device) for k, v in inputs.items()}
                 targets = targets.to(self.args.device)
                 outputs = self.base_model(inputs)
-                probs.append(torch.max(F.softmax(outputs['predicts'][-1], dim=-1)).detach().cpu().item())
-        return torch.tensor(probs)
+                probs = torch.concat([probs, (F.softmax(outputs['predicts'][-1], dim=-1)).detach().cpu()])
+        return probs
     def train(self, train_dataloader, test_dataloader):
         _params = filter(lambda p: p.requires_grad, self.base_model.parameters())
         if self.args.method == 'ce':
