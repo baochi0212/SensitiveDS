@@ -30,4 +30,3 @@ class Transformer(nn.Module):
             'label_feats': label_feats
         }
         return outputs
-
