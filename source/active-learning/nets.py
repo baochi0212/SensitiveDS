@@ -213,9 +213,7 @@ class Netformer(nn.Module):
                 targets = targets.to(self.args.device)
                 outputs = self.base_model(inputs)
                 probs = torch.concat([probs, (F.softmax(outputs['predicts'][-1], dim=-1)).detach().cpu()])
-        print("VLLLL", outputs['predicts'].shape)
-        print("CZZZZ", probs.shape)
-        return probs
+        return probs.view(-1, 5) #5 classes
     def train(self, train_dataloader, test_dataloader):
         _params = filter(lambda p: p.requires_grad, self.base_model.parameters())
         if self.args.method == 'ce':
