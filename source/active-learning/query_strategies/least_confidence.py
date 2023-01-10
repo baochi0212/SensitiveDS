@@ -28,7 +28,7 @@ class LeastConfidence(Strategy):
         unlabeled_dataset = UnlabeledSet(unlabeled_data)
         loader = data.DataLoader(unlabeled_dataset, batch_size=1, shuffle=False, collate_fn=collate_fn)
         probs = self.predict_prob(loader)
-        uncertainties = torch.max(probs, dim=1)
+        uncertainties = torch.max(probs, dim=1)[1]
         #check the confusion
         print(f"MIN PROB vs MAX PROB {uncertainties.sort()[0][:n].numpy()[0], uncertainties.sort()[0][:n].numpy()[-1]}")
         print(f"MIN vs MAX UNSELECTED{uncertainties.sort()[0].numpy()[0], uncertainties.sort()[0].numpy()[-1]}")
