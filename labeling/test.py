@@ -1,6 +1,6 @@
 import json
 
-path = "/home/xps/educate/code/hust/DS_20222/data-science-e10/source/active-learning/data/sensitive_train.json"
+path = "/home/xps/educate/code/hust/DS_20222/data-science-e10/source/active-learning/data/sensitive_test.json"
 files = []
 #gotta read to save data before write new files !!!!
 data = json.load(open(path, 'r'))
