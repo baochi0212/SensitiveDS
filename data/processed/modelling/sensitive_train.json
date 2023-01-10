@@ -960,6 +960,18 @@
       "label": "terrorism"
    },
    {
+      "text": "The district is nearly 70% Hispanic and has a large Mexican American\u00a0 population",
+      "label": "religion"
+   },
+   {
+      "text": "He said that when he talked about bringing in heavy weapons by boat, he was actually engaged in creative writing and just referencing a screenplay he wrote Jan",
+      "label": "terrorism"
+   },
+   {
+      "text": "She told jurors that she felt like she was part of a historic moment and that rioters were making history on Jan.  6",
+      "label": "terrorism"
+   },
+   {
       "text": "OP's Bio: I climb from time to time.  I play the clarinet",
       "label": "neutral"
    },
@@ -5164,10 +5176,6 @@
       "label": "religion"
    },
    {
-      "text": "Rather, the rule is considered to apply to all Buddhists, so it was worse than I thought",
-      "label": "religion"
-   },
-   {
       "text": "The mass shooter is responsible for his evil acts, obviously",
       "label": "terrorism"
    },
@@ -6117,14 +6125,6 @@
    },
    {
       "text": "Pakistan warns Afghanistan's Taliban not to shelter militants",
-      "label": "terrorism"
-   },
-   {
-      "text": "Three UN Peacekeepers Killed, Three Injured in Mali Attack",
-      "label": "terrorism"
-   },
-   {
-      "text": "Suspected Jihadis Kill Troops, Civilians in Nigeria",
       "label": "terrorism"
    }
 ]
