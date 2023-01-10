@@ -142,15 +142,15 @@ print(f"number of unlabeled pool: {len(train_dataset._dataset)}")
 print(f"number of testing pool: {len(test_dataset)}")
 
 # round 0 accuracy
-# print("Round 0")
-# strategy.train()
-# preds = strategy.predict(test_dataloader)
+print("Round 0")
+strategy.train()
+preds = strategy.predict(test_dataloader)
 
 for rd in range(1, args.n_round+1):
     print(f"Round {rd}")
     #RELOAD MODEL
     print(f"..........RELOAD MODEL...........")
-    # strategy.net = get_net(args.dataset_name, device, args) 
+    strategy.net = get_net(args.dataset_name, device, args) 
     #QUERY SAMPLES
     query_idxs = strategy.query(args.n_query, collate_fn=collate_fn)
 
@@ -162,10 +162,10 @@ for rd in range(1, args.n_round+1):
     print("------------------------------NUM LABELED", sum(train_dataset.labeled_idxs), len(train_dataset.labeled_dataset))
     print("------------------------------NUM BATCH", len(train_dataloader))
     #TRAIN
-    # if not args.dataset_name:
-    #     strategy.train(args, train_dataloader, test_dataloader)
-    # else:
-    #     strategy.train(args, train_dataloader, test_dataloader)
+    if not args.dataset_name:
+        strategy.train(args, train_dataloader, test_dataloader)
+    else:
+        strategy.train(args, train_dataloader, test_dataloader)
 
 
     # #PREDICTION 
