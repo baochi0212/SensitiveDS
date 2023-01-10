@@ -36,10 +36,12 @@ for filename in glob(f"{processed_path}/*.json"):
     label = os.path.basename(filename)[:-5]
     data_labels.append(label)  
     num_samples[label] = (len(json.load(open(filename, 'r'))))
-    concat_dict.extend(json.load(open(filename, 'r')))
+    for f in json.load(open(filename, 'r')):
+        if f not in concat_dict:
+            concat_dict.append(f)
 sum_count = sum([num_samples[label] for label in num_samples if label not in ['train', 'test', 'dev']])
 num_samples = dict([(key, value) if key  in ['train', 'dev', 'test'] else (key, value/sum_count) for key, value in num_samples.items()])
-
+print("NUM SAMPLES", len(concat_dict))
 
 #number of samples:
 data_stat = dict([(mode, dict([(label, len(concat_dict)*num_samples[mode]*num_samples[label]) for label in data_labels])) for mode in ['train', 'dev', 'test']])
@@ -49,9 +51,11 @@ for mode in data_stat.keys():
     for file in concat_dict:
         if data_stat[mode][file['label']] > 0:
             data.append(file)
+            concat_dict.remove(file)
             data_stat[mode][file['label']] -= 1
     json.dump(data, open(f'{processed_path}/sensitive_{mode}.json', 'w'), indent=3)
 print("AFTER", data_stat)
+print("2 CHECK NUM SAMPLES", len(concat_dict))
 
 
 
