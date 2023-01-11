@@ -1,10 +1,14 @@
 import json
 import os
 from glob import glob
+from copy import deepcopy
+
+
+
 processed_path = "/home/xps/educate/code/hust/DS_20222/data-science-e10/data/processed/modelling"
 data_labels = ['insult', 'religion', 'terrorism', 'politics']
 concat_dict = []
-num_samples = {'train': 0.6 , 'test': 0.4, 'dev': 0.0} #keep track of splitting
+num_samples = {'train': 0.6 , 'test': 0.4, 'dev': 0} #keep track of splitting
 neutral_dict = []
 sum_count = 0
 for data_label in data_labels:
@@ -41,18 +45,26 @@ for filename in glob(f"{processed_path}/*.json"):
             concat_dict.append(f)
 sum_count = sum([num_samples[label] for label in num_samples if label not in ['train', 'test', 'dev']])
 num_samples = dict([(key, value) if key  in ['train', 'dev', 'test'] else (key, value/sum_count) for key, value in num_samples.items()])
-print("NUM SAMPLES", len(concat_dict))
+
+
 
 #number of samples:
 data_stat = dict([(mode, dict([(label, len(concat_dict)*num_samples[mode]*num_samples[label]) for label in data_labels])) for mode in ['train', 'dev', 'test']])
 print(data_stat)
 for mode in data_stat.keys():
+    temp_dict = deepcopy(concat_dict)
     data = []
-    for file in concat_dict:
+    for file in temp_dict:
+        
         if data_stat[mode][file['label']] > 0:
             data.append(file)
             concat_dict.remove(file)
             data_stat[mode][file['label']] -= 1
+    if mode == 'test':
+        for f in concat_dict:
+            if f not in data:
+                data.append(f)
+        
     json.dump(data, open(f'{processed_path}/sensitive_{mode}.json', 'w'), indent=3)
 print("AFTER", data_stat)
 print("2 CHECK NUM SAMPLES", len(concat_dict))
