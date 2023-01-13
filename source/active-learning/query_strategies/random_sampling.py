@@ -6,4 +6,6 @@ class RandomSampling(Strategy):
         super(RandomSampling, self).__init__(dataset, net)
 
     def query(self, n, collate_fn=None):
-        return np.random.choice(np.where(self.dataset.labeled_idxs==0)[0], n, replace=False)
+        idxs = np.random.choice(np.where(self.dataset.labeled_idxs==0)[0], n, replace=False)
+        print("idxs", idxs)
+        return idxs
