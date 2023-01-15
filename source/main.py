@@ -8,6 +8,7 @@ from data_utils import load_data, text2dict
 from transformers import logging, AutoTokenizer, AutoModel, BertModel, BertConfig, get_linear_schedule_with_warmup
 from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 class Instructor:
 
@@ -92,7 +93,16 @@ class Instructor:
                 y_true += targets.cpu().numpy().reshape(-1).tolist()
                 n_test += targets.size(0)
         print(classification_report(y_true, y_pred))
-        plt.heatmap(confusion_matrix(y_true, y_pred))
+        
+    
+        #Confusion matrix
+        df_cm = pd.DataFrame(array, range(6), range(6))
+        # plt.figure(figsize=(10,7))
+        sns.set(font_scale=1.4) # for label size
+        sns.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
+
+        plt.show()
+
         return test_loss / n_test, n_correct / n_test
 
     def run(self):
