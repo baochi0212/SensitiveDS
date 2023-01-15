@@ -98,12 +98,7 @@ class Instructor:
     
         #Confusion matrix
         cm = confusion_matrix(y_true, y_pred)
-        df_cm = pd.DataFrame(cm, range(5), range(5))
-        # plt.figure(figsize=(10,7))
-        sns.set(font_scale=1.4) # for label size
-        sns.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
-
-        plt.imshow(df_cm)
+        print("confusion matrix", cm)
 
         return test_loss / n_test, n_correct / n_test
 
