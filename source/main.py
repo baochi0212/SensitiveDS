@@ -6,7 +6,7 @@ import torch.nn as nn
 from loss_func import CELoss, SupConLoss, DualLoss
 from data_utils import load_data, text2dict
 from transformers import logging, AutoTokenizer, AutoModel, BertModel, BertConfig, get_linear_schedule_with_warmup
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 class Instructor:
@@ -92,6 +92,7 @@ class Instructor:
                 y_true += targets.cpu().numpy().reshape(-1).tolist()
                 n_test += targets.size(0)
         print(classification_report(y_true, y_pred))
+        print(confusion_matrix(y_true, y_pred))
         return test_loss / n_test, n_correct / n_test
 
     def run(self):
