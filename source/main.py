@@ -9,6 +9,7 @@ from transformers import logging, AutoTokenizer, AutoModel, BertModel, BertConfi
 from sklearn.metrics import classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
 
 class Instructor:
 
@@ -96,7 +97,8 @@ class Instructor:
         
     
         #Confusion matrix
-        df_cm = pd.DataFrame(array, range(6), range(6))
+        cm = confusion_matrix(y_true, y_pred)
+        df_cm = pd.DataFrame(cm, range(5), range(5))
         # plt.figure(figsize=(10,7))
         sns.set(font_scale=1.4) # for label size
         sns.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
