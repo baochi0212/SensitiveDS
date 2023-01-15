@@ -103,7 +103,7 @@ class Instructor:
         sns.set(font_scale=1.4) # for label size
         sns.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
 
-        plt.show()
+        plt.imshow(df_cm)
 
         return test_loss / n_test, n_correct / n_test
 
