@@ -44,7 +44,7 @@ class Augmenter:
 if __name__ ==  '__main__':
     data_path = main_dir + '/source/data/sensitive_train.json' 
     augment_path = main_dir + "source/data/sensitive_augment.json"
-    init_augment = Augmenter(options=[None]) 
+    init_augment = Augmenter(options=['backtranslate']) 
     data_dict = json.load(open(data_path, 'r'))
     #augment
     augment_dict = init_augment(data_dict)     
