@@ -12,13 +12,14 @@ class Augmenter:
     def __init__(self, options, n=1):
         self.options = options
         self.n = n
-
-    def back_translate(self, text):
-        back_translation_aug = naw.BackTranslationAug(
+        self.back_translation_aug = naw.BackTranslationAug(
                 from_model_name='facebook/wmt19-en-de', 
             to_model_name='facebook/wmt19-de-en'
         )
-        return back_translation_aug.augment(text, n=self.n)
+
+    def back_translate(self, text):
+  
+        return self.back_translation_aug.augment(text, n=self.n)
     def embedding(self, text):
         augmentor = nas.ContextualWordEmbsForSentenceAug(model_path='gpt2')
         return augmentor.augment(text, n=self.n) 
@@ -43,7 +44,7 @@ class Augmenter:
 if __name__ ==  '__main__':
     data_path = main_dir + '/source/data/sensitive_train.json' 
     augment_path = main_dir + "source/data/sensitive_augment.json"
-    init_augment = Augmenter(options=['backtranslate']) 
+    init_augment = Augmenter(options=[None]) 
     data_dict = json.load(open(data_path, 'r'))
     #augment
     augment_dict = init_augment(data_dict)     
