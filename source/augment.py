@@ -4,7 +4,9 @@ import nlpaug.augmenter.sentence as nas
 import json
 from copy import deepcopy
 import random
+import os
 
+main_dir = os.environ.get('MAIN_DIR')
 
 class Augmenter:
     def __init__(self, options, n=1):
@@ -39,8 +41,8 @@ class Augmenter:
         return new_dict     
 
 if __name__ ==  '__main__':
-    data_path = "/home/tranbaochi_/Study/hust/data-science-e10/source/data/sensitive_train.json"
-    augment_path = "/home/tranbaochi_/Study/hust/data-science-e10/source/data/sensitive_augment.json"
+    data_path = main_dir + '/source/data/sensitive_train.json' 
+    augment_path = main_dir + "source/data/sensitive_augment.json"
     init_augment = Augmenter(options=['backtranslate']) 
     data_dict = json.load(open(data_path, 'r'))
     #augment
