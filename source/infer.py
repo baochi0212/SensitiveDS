@@ -25,4 +25,4 @@ model = Transformer(base_model, args.num_classes, args.method)
 model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
 model = model.to(device)
 #output
-print("OUTPUT", label_index[torch.argmax(model(input)['predicts'])])
+print("OUTPUT", label_index[torch.argmax(model(input)['predicts']).item()])
