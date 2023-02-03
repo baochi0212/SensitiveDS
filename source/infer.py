@@ -35,4 +35,5 @@ def get_prediction(input):
 
 if __name__ == '__main__':
     input = "He fucked my hard"
+    print(label_index)
     print("PREDICTION", get_prediction(input))
