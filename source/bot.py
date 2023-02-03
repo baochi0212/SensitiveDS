@@ -22,7 +22,8 @@ def get_input(message):
 def main(message):
     #get passage
     input = message.text
-    output = get_prediction(input)
+    output, signal = get_prediction(input)
+    print("SIGNAL", signal)
     output = ','.join(output)
     bot.reply_to(message, f"Result ne cu:   {output}")
 
