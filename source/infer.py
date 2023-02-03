@@ -32,3 +32,7 @@ def get_prediction(input):
     model = model.to(device)
     output = torch.argmax(model(input)['predicts'], dim=-1)
     return [label_index[label.item()] for label in output], model(input)['predicts']
+
+if __name__ == '__main__':
+    input = "He fucked my hard"
+    print("PREDICTION", get_prediction(input))
