@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import os
-
+label_dict = {'insult': 0, 'religion': 1, 'terrorism': 2, 'politics': 3, 'neutral': 4}
+label_index = dict([(value, key) for key, value in label_dict.items()])
 save_path = os.environ['SAVE_MODEL']
 device = 'cuda'
 args, logger = get_config()
@@ -24,4 +25,4 @@ model = Transformer(base_model, args.num_classes, args.method)
 model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
 model = model.to(device)
 #output
-print("OUTPUT", max(model(input)['predicts']))
+print("OUTPUT", label_index[torch.argmax(model(input)['predicts'])])
