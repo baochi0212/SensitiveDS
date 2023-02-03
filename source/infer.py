@@ -17,8 +17,11 @@ device = 'cuda'
 args, logger = get_config()
 input = 'CHi dep trai is going to fuck with you'
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+input = tokenizer(input, return_tensors='pt')
+input = dict([(key, value.to(device)) for key, value in input.items()])
 base_model = AutoModel.from_pretrained('bert-base-uncased')
 model = Transformer(base_model, args.num_classes, args.method)
-model = model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
-model.to(device)
-print(model(tokenizer(input)))
+model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
+model = model.to(device)
+#output
+print("OUTPUT", model(input))
