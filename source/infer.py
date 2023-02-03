@@ -29,6 +29,7 @@ def get_prediction(input):
     base_model = AutoModel.from_pretrained('bert-base-uncased')
     model = Transformer(base_model, args.num_classes, args.method)
     model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
+    model.eval()
     model = model.to(device)
     output = torch.argmax(model(input)['predicts'], dim=-1)
     return [label_index[label.item()] for label in output], model(input)['predicts']
