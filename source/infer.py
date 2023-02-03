@@ -17,7 +17,7 @@ save_path = os.environ['SAVE_MODEL']
 device = 'cuda'
 args, logger = get_config()
 input = "The Justice Department accused Naser Almadaoji, an Iraqi-born U.S. citizen, of arranging with an Islamic State supporter to travel to Afghanistan, where he intended to train with a group called ISIS Wilayat Khorasan. The supporter was actually an FBI informant, and federal agents arrested Almadaoji at the Columbus airport before he departed in October 2018."
-input = ')
+input = input.split('.')
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 input = tokenizer(input, return_tensors='pt')
 input = dict([(key, value.to(device)) for key, value in input.items()])
