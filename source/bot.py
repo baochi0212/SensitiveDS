@@ -17,14 +17,14 @@ def get_input(message):
     text = "What is your passage?"
     sent_msg = bot.send_message(message.chat.id, text)
     #message, callback, *args  
-    bot.register_next_step(sent_msg, main)
+    bot.register_next_step_handler(sent_msg, main)
 
 def main(message):
     #get passage
     input = message.text
     output = get_prediction(input)
     output = ','.join(output)
-    bot.reply_to(message, f"Result ne cu: {output}")
+    bot.reply_to(message, f"Result ne cu:   {output}")
 
 
 
