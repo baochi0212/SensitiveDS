@@ -16,20 +16,19 @@ label_index = dict([(value, key) for key, value in label_dict.items()])
 save_path = os.environ['SAVE_MODEL']
 device = 'cuda'
 args, logger = get_config()
-input = "I'm normal person. But he fucked me like a bitch"
-input = input.split('.')
-tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-input  = tokenizer(input,
-                        truncation=True,
-                         max_length=256,
-                         pad_to_max_length=True,
-                         return_tensors='pt')
-input = dict([(key, value.to(device)) for key, value in input.items()])
-base_model = AutoModel.from_pretrained('bert-base-uncased')
-model = Transformer(base_model, args.num_classes, args.method)
-model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
-model = model.to(device)
-output = torch.argmax(model(input)['predicts'], dim=-1)
-print("LABEL", output)
-print(model(input)['predicts'])
-print("OUTPUT", [label_index[label.item()] for label in output])
+
+def get_prediction(input):
+    input = input.split('.')
+    tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+    input  = tokenizer(input,
+                            truncation=True,
+                            max_length=256,
+                            pad_to_max_length=True,
+                            return_tensors='pt')
+    input = dict([(key, value.to(device)) for key, value in input.items()])
+    base_model = AutoModel.from_pretrained('bert-base-uncased')
+    model = Transformer(base_model, args.num_classes, args.method)
+    model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
+    model = model.to(device)
+    output = torch.argmax(model(input)['predicts'], dim=-1)
+    return [label_index[label.item()] for label in output])
