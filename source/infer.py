@@ -16,7 +16,8 @@ label_index = dict([(value, key) for key, value in label_dict.items()])
 save_path = os.environ['SAVE_MODEL']
 device = 'cuda'
 args, logger = get_config()
-input = 'CHi dep trai is going to fuck with you'
+input = "The Justice Department accused Naser Almadaoji, an Iraqi-born U.S. citizen, of arranging with an Islamic State supporter to travel to Afghanistan, where he intended to train with a group called ISIS Wilayat Khorasan. The supporter was actually an FBI informant, and federal agents arrested Almadaoji at the Columbus airport before he departed in October 2018."
+input = ')
 tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
 input = tokenizer(input, return_tensors='pt')
 input = dict([(key, value.to(device)) for key, value in input.items()])
@@ -24,5 +25,6 @@ base_model = AutoModel.from_pretrained('bert-base-uncased')
 model = Transformer(base_model, args.num_classes, args.method)
 model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
 model = model.to(device)
+output = torch.argmax(model(input)['predicts']).item()
 #output
-print("OUTPUT", label_index[torch.argmax(model(input)['predicts']).item()])
+print("OUTPUT", [label_index[label.item() for label in output]])
