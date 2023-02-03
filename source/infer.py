@@ -31,4 +31,4 @@ def get_prediction(input):
     model.load_state_dict(torch.load(save_path + '/best_model.mdl'))
     model = model.to(device)
     output = torch.argmax(model(input)['predicts'], dim=-1)
-    return [label_index[label.item()] for label in output])
+    return [label_index[label.item()] for label in output]
