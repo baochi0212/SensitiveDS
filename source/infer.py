@@ -35,6 +35,6 @@ def get_prediction(input):
     return [label_index[label.item()] for label in output], model(input)['predicts']
 
 if __name__ == '__main__':
-    input = "He fucks me really hard"
+    input = "He call me a fucking bastard"
     print(label_index)
     print("PREDICTION", get_prediction(input))
