@@ -136,6 +136,7 @@ class Instructor:
             train_loss, train_acc = self._train(train_dataloader, criterion, optimizer, scheduler)
             test_loss, test_acc = self._test(test_dataloader, criterion)
             if test_acc > best_acc or (test_acc == best_acc and test_loss < best_loss):
+                logger.info("BETTER MODEL SAVED")
                 torch.save(self.model.state_dict(), f"{save_path}/best_model.mdl")
                 best_acc, best_loss = test_acc, test_loss
             self.logger.info('{}/{} - {:.2f}%'.format(epoch+1, self.args.num_epoch, 100*(epoch+1)/self.args.num_epoch))
