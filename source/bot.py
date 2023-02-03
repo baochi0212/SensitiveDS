@@ -25,7 +25,7 @@ def main(message):
     output, signal = get_prediction(input)
     print("SIGNAL", signal)
     output = ','.join(output)
-    bot.reply_to(message, f"Result ne cu:   {output}")
+    bot.reply_to(message, f"Content tag:   {output}")
 
 
 

@@ -38,3 +38,6 @@ if __name__ == '__main__':
     input = "He call me a fucking bastard"
     print(label_index)
     print("PREDICTION", get_prediction(input))
+
+    #Former President Donald Trump Thursday refused to commit to supporting the 2024 Republican presidential nominee — if he doesn’t win it. “It would depend. I would give you the same answer I gave in 2016,” Trump said in an interview with conservative radio host Hugh Hewitt. “It would have to depend on who the nominee was
+    #I said hello. But He call me a fucking bastard
