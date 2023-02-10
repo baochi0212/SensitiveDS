@@ -13,35 +13,23 @@ As the rapid development of technology and the available of a large number of In
 - Hoang Tran Nhat Minh
 
 ## Features
-
+- Active learning
+- Text classication
 ## Dataset
+Senstive content data 
 
 ## Methods
+- Machine learning
+- Deep learning
 
 ## Evaluation
+- Accuracy
+- F1 score
 
 ## Installation
-`export MAIN_DIR=pwd`
-
-
-## Plugins
-
-
-| Plugin | README |
-| ------ | ------ |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-
-## Development
-
-Want to contribute? Great!
-
-
-
-
-## License
-
-MIT
+- Package:
+`pip install -q requirements.txt`
+- Modelling & deployment:
+`run ds2022.ipynb` 
 
 
