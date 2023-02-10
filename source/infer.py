@@ -32,10 +32,10 @@ def get_prediction(input):
     model.eval()
     model = model.to(device)
     output = torch.argmax(model(input)['predicts'], dim=-1)
-    return [(text_input[i], label_index[output[i].item()], torch.max(torch.nn.functional.softmax(model(input)['predicts'][i], -1), -1)[0    ].item()) for i in range(len(text_input))]
+    return [(text_input[i], label_index[output[i].item()], torch.max(torch.nn.functional.softmax(model(input)['predicts'][i], -1), -1)[0].item()) for i in range(len(text_input))]
 
 if __name__ == '__main__':
-    input = "He call me a fucking bastard"
+    input = "Fuck you bastard"
     print(label_index)
     print("PREDICTION", get_prediction(input))
 
