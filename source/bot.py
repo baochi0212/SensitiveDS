@@ -1,7 +1,7 @@
 import os
 import telebot
 import pandas as pd
-from telegram import ParseMode
+from telegram.constants import ParseMode
 from prettytable import PrettyTable
 from infer import get_prediction
 
