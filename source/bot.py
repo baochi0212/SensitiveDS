@@ -1,6 +1,7 @@
 import os
 import telebot
 import pandas as pd
+from prettytable import PrettyTable
 from infer import get_prediction
 
 
@@ -25,13 +26,10 @@ def main(message):
     input = message.text
     outputs = get_prediction(input)
     print("MY WARNING's MAYBE WRONG, BE CAUTIOUS!!!")
-    dict = {'text': [], 'label': [], 'probability': []}
+    table = PrettyTable(['text', 'label', 'probability'])
     for (input, output, prob) in outputs:
-        print(prob)
-        dict['text'].append(input)
-        dict['label'].append(output)
-        dict['probability'].append(prob.detach().cpu())
-    print(pd.DataFrame.from_dict(dict))
+        table.add_row([input, output, prob])
+    bot.reply_to(message, str(table))
 
 
 
