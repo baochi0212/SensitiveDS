@@ -27,9 +27,10 @@ def main(message):
     print("MY WARNING's MAYBE WRONG, BE CAUTIOUS!!!")
     dict = {'text': [], 'label': [], 'probability': []}
     for (input, output, prob) in outputs:
+        print(prob)
         dict['text'].append(input)
         dict['label'].append(output)
-        dict['probability'].append(prob.cpu())
+        dict['probability'].append(prob.detach().cpu())
     print(pd.DataFrame.from_dict(dict))
 
 
