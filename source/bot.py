@@ -29,7 +29,7 @@ def main(message):
     for (input, output, prob) in outputs:
         dict['text'].append(input)
         dict['label'].append(output)
-        dict['probability'].append(prob)
+        dict['probability'].append(prob.cpu())
     print(pd.DataFrame.from_dict(dict))
 
 
