@@ -29,7 +29,7 @@ def main(message):
     print("MY WARNING's MAYBE WRONG, BE CAUTIOUS!!!")
     table = PrettyTable(['text', 'label', 'probability'])
     for (input, output, prob) in outputs:
-        table.add_row([input[:10] + '...', output, prob])
+        table.add_row([input[:20] + '...', output, prob])
     bot.reply_to(message, f'<pre>{table}</pre>', parse_mode=ParseMode.HTML)
 
 

@@ -18,7 +18,7 @@ device = 'cuda'
 args, logger = get_config()
 
 def get_prediction(input):
-    text_input = input.split('.')[:-1]
+    text_input = [text for text in input.split('.') if len(text) > 1]
     tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
     input  = tokenizer(text_input,
                             truncation=True,
