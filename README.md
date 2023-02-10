@@ -21,7 +21,7 @@ As the rapid development of technology and the available of a large number of In
 ## Evaluation
 
 ## Installation
-`export MAIN_DIR=pwd `
+`export MAIN_DIR=pwd`
 
 
 ## Plugins
