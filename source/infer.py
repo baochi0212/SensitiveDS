@@ -18,7 +18,7 @@ device = 'cuda'
 args, logger = get_config()
 
 def get_prediction(input):
-    text_input = input.split('.')
+    text_input = input.split('.')[:-1]
     tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
     input  = tokenizer(text_input,
                             truncation=True,
@@ -32,7 +32,7 @@ def get_prediction(input):
     model.eval()
     model = model.to(device)
     output = torch.argmax(model(input)['predicts'], dim=-1)
-    return [(text_input[i], label_index[output[i].item()], torch.max(torch.nn.functional.softmax(model(input)['predicts'][i], -1), -1)[0].item()) for i in range(len(text_input))]
+    return [(text_input[i], label_index[output[i].item()], torch.max(torch.nn.functional.softmax(model(input)['predicts'][i], -1), -1)[0    ].item()) for i in range(len(text_input))]
 
 if __name__ == '__main__':
     input = "He call me a fucking bastard"
