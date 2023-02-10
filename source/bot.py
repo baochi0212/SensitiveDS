@@ -10,9 +10,13 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 bot = telebot.TeleBot(BOT_TOKEN)
 
 
-@bot.message_handler(commands=['start', 'hello'])
+@bot.message_handler(commands=['hello'])
 def send_welcome(message):
-    bot.reply_to(message, "Hello boy")
+    bot.reply_to(message, "Hello kiddo!")
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Let's working man")
 
 @bot.message_handler(commands=['sensitive_content'])
 def get_input(message):
