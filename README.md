@@ -4,7 +4,6 @@
 
 
 As the rapid development of technology and the available of a large number of Internet blogs, online articles, ebooks, people tend to opt for these online materials rather than traditional means of education like books, newspapers. Our project aims to help keep users, especially children from these inappropriate contents.
-
 ## Team Member 
 - Tran Bao Chi
 - Nguyen Thanh Dat
@@ -31,5 +30,16 @@ Senstive content data
 `pip install -q requirements.txt`
 - Modelling & deployment:
 `run ds2022.ipynb` 
+## Data source:
+- Social Media: Reddit
+- News: The politics, NBC news, 
+
+## Contribution:
+- Tran Bao Chi: Idea, Crawling, Annotating control (Active Learning), Modelling (Bert), Report. 
+- Nguyen Thanh Dat
+- Do Hoang Long
+- Nguyen Truong Truong An
+- Hoang Tran Nhat Minh
+
 
 
