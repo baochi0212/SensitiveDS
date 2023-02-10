@@ -37,7 +37,7 @@ Senstive content data
 ## Contribution:
 - Tran Bao Chi: Idea, Crawling, Annotating control (Active Learning), Modelling (Bert), Report.     
 - Nguyen Thanh Dat
-- Do Hoang Long
+- Do Hoang Long: Labelling(politics), Modelling(TFIDF + Random Forest), Report(TFIDF + Random Forest)
 - Nguyen Truong Truong An
 - Hoang Tran Nhat Minh
 
