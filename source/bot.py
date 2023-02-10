@@ -1,6 +1,7 @@
 import os
 import telebot
 import pandas as pd
+from telegram import ParseMode
 from prettytable import PrettyTable
 from infer import get_prediction
 
@@ -29,7 +30,7 @@ def main(message):
     table = PrettyTable(['text', 'label', 'probability'])
     for (input, output, prob) in outputs:
         table.add_row([input, output, prob])
-    bot.reply_to(message, str(table))
+    bot.reply_to(message, f'<pre>{table}</pre>', parse_mode=ParseMode.HTML)
 
 
 
