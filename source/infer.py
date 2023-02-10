@@ -32,7 +32,7 @@ def get_prediction(input):
     model.eval()
     model = model.to(device)
     output = torch.argmax(model(input)['predicts'], dim=-1)
-    return [(text_input[i], label_index[output[i].item()], torch.max(torch.nn.functional.softmax(model(input)['predicts'][i], -1), -1).item()) for i in range(len(text_input))]
+    return [(text_input[i], label_index[output[i].item()], torch.max(torch.nn.functional.softmax(model(input)['predicts'][i], -1), -1)[0].item()) for i in range(len(text_input))]
 
 if __name__ == '__main__':
     input = "He call me a fucking bastard"
@@ -41,3 +41,5 @@ if __name__ == '__main__':
 
     #Former President Donald Trump Thursday refused to commit to supporting the 2024 Republican presidential nominee — if he doesn’t win it. “It would depend. I would give you the same answer I gave in 2016,” Trump said in an interview with conservative radio host Hugh Hewitt. “It would have to depend on who the nominee was
     #I said hello. But He call me a fucking bastard
+
+
