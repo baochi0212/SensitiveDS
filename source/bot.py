@@ -1,5 +1,6 @@
 import os
 import telebot
+import pandas as pd
 from infer import get_prediction
 
 
@@ -22,11 +23,15 @@ def get_input(message):
 def main(message):
     #get passage
     input = message.text
-    output, signal = get_prediction(input)
-    print("SIGNAL", signal)
-    output = ','.join(output)
-    bot.reply_to(message, f"Content tag:   {output}")
-
+    outputs = get_prediction(input)
+    print("MY WARNING's MAYBE WRONG, BE CAUTIOUS!!!")
+    dict = {'text': [], 'label': [], 'probability': []}
+    for (input, output, prob) in outputs:
+        dict['text'].append(input)
+        dict['label'].append(output)
+        dict['probability'].append(prob)
+    print(pd.DataFrame.from_dcit(dict))
+    
 
 
 bot.infinity_polling()

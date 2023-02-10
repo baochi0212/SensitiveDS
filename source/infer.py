@@ -18,9 +18,9 @@ device = 'cuda'
 args, logger = get_config()
 
 def get_prediction(input):
-    input = input.split('.')
+    text_input = input.split('.')
     tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
-    input  = tokenizer(input,
+    input  = tokenizer(text_input,
                             truncation=True,
                             max_length=256,
                             pad_to_max_length=True,
@@ -32,7 +32,7 @@ def get_prediction(input):
     model.eval()
     model = model.to(device)
     output = torch.argmax(model(input)['predicts'], dim=-1)
-    return [label_index[label.item()] for label in output], model(input)['predicts']
+    return [(text_input[i], label_index[output[i].item()], model(input)['predicts'][i]) for i in range(len(text_input))]
 
 if __name__ == '__main__':
     input = "He call me a fucking bastard"
