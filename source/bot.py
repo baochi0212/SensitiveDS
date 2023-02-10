@@ -30,8 +30,8 @@ def main(message):
         dict['text'].append(input)
         dict['label'].append(output)
         dict['probability'].append(prob)
-    print(pd.DataFrame.from_dcit(dict))
-    
+    print(pd.DataFrame.from_dict(dict))
+
 
 
 bot.infinity_polling()
