@@ -30,10 +30,10 @@ def main(message):
     #get passage
     input = message.text
     outputs = get_prediction(input)
-    print("MY WARNING's MAYBE WRONG, BE CAUTIOUS!!!")
     table = PrettyTable(['text', 'label', 'probability'])
     for (input, output, prob) in outputs:
         table.add_row([input.strip()[:20] + '...', output, prob])
+    bot.send_message(message.chat.id, "MY WARNING's MAYBE WRONG, BE CAUTIOUS!!!")
     bot.reply_to(message, f'<pre>{table}</pre>', parse_mode=ParseMode.HTML)
 
 
