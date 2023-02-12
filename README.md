@@ -39,7 +39,7 @@ Senstive content data
 - Nguyen Thanh Dat
 - Do Hoang Long: Labelling(politics), Modelling(TFIDF + Random Forest), Report(TFIDF + Random Forest)
 - Nguyen Truong Truong An
-- Hoang Tran Nhat Minh
+- Hoang Tran Nhat Minh: Labelling (terrorism), Modelling (XLM-RoBERTa), Report.
 
 ## TEST ARTICLE:
 ```
